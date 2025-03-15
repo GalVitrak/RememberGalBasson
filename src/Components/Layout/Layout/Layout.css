@@ -1,0 +1,86 @@
+.Layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100vh;
+}
+
+.Header {
+  grid-column: span 12 / span 12;
+  grid-row: span 3 / span 3;
+  flex-shrink: 0;
+}
+
+.Header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.Header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.Footer {
+  grid-column: span 12 / span 12;
+  grid-column-start: 1;
+  grid-row-start: 12;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.Main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  min-height: 0;
+}
+
+.memorial-section {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: var(--light-silver);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.memorial-section h3 {
+  color: var(--accent-blue);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.memorial-section p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.memorial-quote {
+  max-width: 600px;
+  margin: 1.5rem auto;
+  font-size: 1.25rem;
+  color: var(--dark-silver);
+}
+
+@media (max-width: 768px) {
+  .Header h1 {
+    font-size: 1.8rem;
+  }
+
+  .Header h2 {
+    font-size: 1.2rem;
+  }
+
+  .memorial-section {
+    margin: 1rem;
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,46 @@
+.Footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
+  background: linear-gradient(
+    to right,
+    #e8e8e8,
+    #c0c0c0,
+    #707070
+  );
+  color: #ffffff;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.Footer p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  margin: 0;
+}
+
+.credit-text {
+  font-size: 0.8rem !important;
+  opacity: 0.8;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .Footer p {
+    font-size: 0.9rem;
+  }
+
+  .credit-text {
+    font-size: 0.7rem !important;
+  }
+}
