@@ -1,33 +1,72 @@
 import { useState } from "react";
 import "./Login.css";
+import adminService from "../../../Services/AdminService";
+import CredentialsModel from "../../../Models/CredentialsModel";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { authStore } from "../../../Context/AuthState";
 
 function Login(): React.ReactElement {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
+  const { register, handleSubmit } =
+    useForm<CredentialsModel>();
+  const [isSubmitted, setIsSubmitted] =
+    useState(false);
+  const [error, setError] = useState<
+    string | null
+  >(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implement login logic
-    console.log("Login attempt:", formData);
-  };
+  async function send(
+    credentials: CredentialsModel
+  ) {
+    setIsSubmitted(true);
+    setError(null);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+    try {
+      console.log(
+        "Login form submitted with username:",
+        credentials.username
+      );
+      await adminService.login(credentials);
+
+      // Check if login was successful
+      const isLoggedIn =
+        authStore.getState().loggedIn;
+      console.log(
+        "Login status after attempt:",
+        isLoggedIn ? "Success" : "Failed"
+      );
+
+      if (isLoggedIn) {
+        // Navigate to admin page instead of reloading
+        navigate("/admin");
+      } else {
+        setError(
+          "התחברות נכשלה. אנא בדוק את פרטי ההתחברות שלך."
+        );
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError(
+        "שגיאה בהתחברות. אנא נסה שוב מאוחר יותר."
+      );
+    } finally {
+      setIsSubmitted(false);
+    }
+  }
 
   return (
     <div className="Login">
       <div className="login-container">
         <h2>כניסת מנהל</h2>
-        <form onSubmit={handleSubmit}>
+
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit(send)}>
           <div className="form-group">
             <label htmlFor="username">
               שם משתמש
@@ -35,10 +74,9 @@ function Login(): React.ReactElement {
             <input
               type="text"
               id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
+              {...register("username")}
               required
+              autoComplete="username"
             />
           </div>
           <div className="form-group">
@@ -48,17 +86,17 @@ function Login(): React.ReactElement {
             <input
               type="password"
               id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
+              {...register("password")}
               required
+              autoComplete="current-password"
             />
           </div>
           <button
+            disabled={isSubmitted}
             type="submit"
             className="login-button"
           >
-            התחבר
+            {isSubmitted ? "מתחבר..." : "התחבר"}
           </button>
         </form>
       </div>

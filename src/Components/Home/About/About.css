@@ -1,3 +1,175 @@
 .About {
-	
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  direction: rtl;
+  color: #333;
+  line-height: 1.7;
+  font-family: "Heebo", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans",
+    "Helvetica Neue", sans-serif;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 50px 30px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    #1e3a8a,
+    #3b82f6,
+    #1e3a8a
+  );
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+.hero-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 25px;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.dates {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.memorial-section {
+  margin-bottom: 50px;
+  padding: 35px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.memorial-section h3 {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  color: #1e3a8a;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 12px;
+  font-weight: 600;
+}
+
+.memorial-section p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin-bottom: 25px;
+  color: #4b5563;
+  text-align: justify;
+  font-weight: 400;
+}
+
+.memorial-quote {
+  color: #ffd700 !important;
+  font-weight: 800;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin: 40px auto;
+  padding: 25px 20px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  background: linear-gradient(
+    to right,
+    #e8e8e8,
+    #c0c0c0,
+    #707070
+  );
+  border-radius: 10px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.memorial-quote::before,
+.memorial-quote::after {
+  content: '"';
+  position: absolute;
+  font-size: 3rem;
+  color: rgba(255, 215, 0, 0.3);
+  line-height: 0;
+}
+
+.memorial-quote::before {
+  top: 25px;
+  right: 10px;
+}
+
+.memorial-quote::after {
+  bottom: 5px;
+  left: 10px;
+}
+
+.mobile-break {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .About {
+    padding: 20px 15px;
+  }
+
+  .hero-section {
+    padding: 35px 20px;
+    margin-bottom: 35px;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+
+  .memorial-section {
+    padding: 25px 20px;
+    margin-bottom: 35px;
+  }
+
+  .memorial-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .memorial-section p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .memorial-quote {
+    font-size: 1.2rem;
+    padding: 20px 15px;
+    margin: 30px auto;
+  }
+
+  .mobile-break {
+    display: inline;
+  }
 }

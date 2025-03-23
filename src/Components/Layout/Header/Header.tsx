@@ -84,9 +84,9 @@ function Header(): React.ReactElement {
           אירועי הנצחה
         </Link>
         <Link
-          to="/candle"
+          to="/candles"
           className={`nav-button ${
-            location.pathname === "/candle"
+            location.pathname === "/candles"
               ? "active"
               : ""
           }`}
