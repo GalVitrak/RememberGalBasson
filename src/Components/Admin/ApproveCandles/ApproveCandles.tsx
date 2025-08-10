@@ -111,12 +111,12 @@ export function ApproveCandles(): React.ReactElement {
           return {
             ...data,
             id: doc.id,
-            date: data.date?.toDate
+            date: data.date?.toDate()
               ? data.date
                   .toDate()
                   .toLocaleDateString("he-IL")
               : "תאריך לא ידוע",
-          } as CandleModel;
+          } as unknown as CandleModel;
         });
       setCandles(candlesData);
     }
@@ -204,7 +204,6 @@ export function ApproveCandles(): React.ReactElement {
                       isProcessing[candle.id]
                     }
                   >
-                    אשר
                     <span className="btn-icon">
                       ✓
                     </span>
@@ -219,7 +218,6 @@ export function ApproveCandles(): React.ReactElement {
                       isProcessing[candle.id]
                     }
                   >
-                    מחק
                     <span className="btn-icon">
                       ✕
                     </span>

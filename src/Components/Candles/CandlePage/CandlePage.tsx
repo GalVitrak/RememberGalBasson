@@ -94,6 +94,7 @@ export function CandlePage(): React.ReactElement {
           </div>
         </div>
       </div>
+      
       {showAddCandle && (
         <AddCandle onClose={setShowAddCandle} />
       )}

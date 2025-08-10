@@ -1,6 +1,5 @@
 import { FaTimes } from "react-icons/fa";
 import "./AddCandle.css";
-import { FaC } from "react-icons/fa6";
 import { useForm } from "react-hook-form";
 import CandleModel from "../../../Models/CandleModel";
 import candleService from "../../../Services/CandleService";

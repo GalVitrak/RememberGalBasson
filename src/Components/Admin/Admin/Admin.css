@@ -1,18 +1,13 @@
 .Admin {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   padding: 20px;
   width: 100%;
+  height: 100%;
 }
 
-.admin-content {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
 .admin-header {
   width: 100%;
@@ -45,13 +40,19 @@
 
 .admin-sections {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: space-around;
+  gap: 50px;
+  margin-top: 50px;
 }
 
 .admin-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height:fit-content;
   flex: 1;
   background-color: #f8f9fa;
   border-radius: 8px;

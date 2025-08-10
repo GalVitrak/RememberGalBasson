@@ -104,6 +104,47 @@ class AdminService {
       throw error;
     }
   }
+
+  public async addForbiddenWords(
+    words: string[]
+  ): Promise<{
+    message: string;
+    addedWords: number;
+    words: string[];
+  }> {
+    try {
+      console.log(
+        "Adding forbidden words:",
+        words
+      );
+
+      const addForbiddenWords = httpsCallable(
+        functions,
+        "addForbiddenWords"
+      );
+
+      const response = await addForbiddenWords({
+        words,
+      });
+
+      console.log(
+        "Forbidden words added successfully:",
+        response.data
+      );
+
+      return response.data as {
+        message: string;
+        addedWords: number;
+        words: string[];
+      };
+    } catch (error) {
+      console.error(
+        "Error adding forbidden words:",
+        error
+      );
+      throw error;
+    }
+  }
 }
 
 const adminService = new AdminService();

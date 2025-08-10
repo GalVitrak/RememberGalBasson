@@ -37,88 +37,65 @@ function Admin(): React.ReactElement {
 
   return (
     <div className="Admin">
-      <div className="admin-content">
-        <div className="admin-header">
-          <h2 className="admin-title">
-            פאנל ניהול
-          </h2>
-          <button
-            className="logout-button"
-            onClick={handleLogout}
+      <div className="admin-header">
+        <h2 className="admin-title">
+          פאנל ניהול
+        </h2>
+        <button
+          className="logout-button"
+          onClick={handleLogout}
+        >
+          התנתק
+        </button>
+      </div>
+      <div className="admin-sections">
+        <div className="admin-section">
+          <h3>ניהול אירועים</h3>
+          <p>הוספת אירועים חדשים ללוח השנה</p>
+          <Link
+            to="/admin/add-event"
+            className="admin-button"
           >
-            התנתק
-          </button>
+            הוסף אירוע
+          </Link>
+        </div>
+        <div className="admin-section">
+          <h3>ניהול מילים אסורות</h3>
+          <p>הוספת מילים אסורות למסנן הנרות</p>
+          <Link
+            to="/admin/forbidden-words"
+            className="admin-button"
+          >
+            נהל מילים אסורות
+          </Link>
         </div>
 
-        <Routes>
-          <Route
-            path="/"
-            element={<AdminDashboard />}
-          />
-          <Route
-            path="/approve-candles"
-            element={<ApproveCandles />}
-          />
-          <Route
-            path="/add-event"
-            element={
-              <div>
-                Add Event Component (Coming Soon)
-              </div>
-            }
-          />
-          <Route
-            path="/add-images"
-            element={
-              <div>
-                Add Images Component (Coming Soon)
-              </div>
-            }
-          />
-        </Routes>
+        <div className="admin-section">
+          <h3>ניהול נרות</h3>
+          <p>אישור נרות זיכרון חדשים</p>
+          <Link
+            to="/admin/approve-candles"
+            className="admin-button"
+          >
+            אשר נרות
+          </Link>
+        </div>
+
+        <div className="admin-section">
+          <h3>ניהול גלריה</h3>
+          <p>העלאת תמונות חדשות לגלריה</p>
+          <Link
+            to="/admin/add-images"
+            className="admin-button"
+          >
+            הוסף תמונות
+          </Link>
+        </div>
       </div>
     </div>
   );
 }
 
 // Dashboard component with navigation buttons
-function AdminDashboard(): React.ReactElement {
-  return (
-    <div className="admin-sections">
-      <div className="admin-section">
-        <h3>ניהול אירועים</h3>
-        <p>הוספת אירועים חדשים ללוח השנה</p>
-        <Link
-          to="/admin/add-event"
-          className="admin-button"
-        >
-          הוסף אירוע
-        </Link>
-      </div>
-
-      <div className="admin-section">
-        <h3>ניהול נרות</h3>
-        <p>אישור נרות זיכרון חדשים</p>
-        <Link
-          to="/admin/approve-candles"
-          className="admin-button"
-        >
-          אשר נרות
-        </Link>
-      </div>
-
-      <div className="admin-section">
-        <h3>ניהול גלריה</h3>
-        <p>העלאת תמונות חדשות לגלריה</p>
-        <Link
-          to="/admin/add-images"
-          className="admin-button"
-        >
-          הוסף תמונות
-        </Link>
-      </div>
-    </div>
-  );
-}
 
 export default Admin;
