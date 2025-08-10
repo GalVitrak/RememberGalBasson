@@ -2,7 +2,7 @@ class CandleModel {
   id: string;
   writerName: string;
   text: string;
-  date: string;
+  createdAt: string;
   status: "Pending" | "Approved" | "Rejected";
   approvedAt?: Date;
 
@@ -10,7 +10,7 @@ class CandleModel {
     id: string,
     writerName: string,
     text: string,
-    date: string,
+    createdAt: string,
     status:
       | "Pending"
       | "Approved"
@@ -20,7 +20,7 @@ class CandleModel {
     this.id = id;
     this.writerName = writerName;
     this.text = text;
-    this.date = date;
+    this.createdAt = createdAt;
     this.status = status;
     this.approvedAt = approvedAt;
   }

@@ -38,6 +38,8 @@ class AdminService {
         "Sending login request to Firebase"
       );
 
+      console.log(loginData);
+
       // Call the Firebase function
       const response = await login(loginData);
 
