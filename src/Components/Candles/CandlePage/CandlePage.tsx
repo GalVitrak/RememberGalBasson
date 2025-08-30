@@ -27,7 +27,7 @@ export function CandlePage(): React.ReactElement {
     return query(
       collection(db, "candles"),
       where("status", "==", "Approved"),
-      orderBy("date", "asc")
+      orderBy("createdAt", "asc")
     );
   }, [candles]);
 
@@ -38,17 +38,20 @@ export function CandlePage(): React.ReactElement {
     if (!candlesSnapshot) return [];
     return candlesSnapshot.docs.map((doc) => {
       const data = doc.data();
+      console.log(data);
       return new CandleModel(
         doc.id,
         data.writerName,
         data.text,
-        data.date
+        data.createdAt,
+        data.status
       );
     });
   }, [candlesSnapshot]);
 
   useEffect(() => {
     setCandles(approvedCandles);
+    console.log(approvedCandles);
   }, [approvedCandles, loading]);
 
   return (
@@ -72,11 +75,12 @@ export function CandlePage(): React.ReactElement {
           <div className="candlePage-list">
             {loading ? (
               <div className="loading">
-                Loading memories...
+                טוען נרות...
               </div>
             ) : error ? (
               <div className="error">
-                Unable to load memories
+                לא ניתן לטעון נרות
+                {error.message}
               </div>
             ) : approvedCandles.length === 0 ? (
               <div className="empty-state">
@@ -94,7 +98,7 @@ export function CandlePage(): React.ReactElement {
           </div>
         </div>
       </div>
-      
+
       {showAddCandle && (
         <AddCandle onClose={setShowAddCandle} />
       )}

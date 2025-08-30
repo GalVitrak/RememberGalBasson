@@ -186,7 +186,7 @@ export function ApproveCandles(): React.ReactElement {
                     {candle.writerName}
                   </span>
                   <span className="candle-date">
-                    {formatDate(candle.date)}
+                    {formatDate(candle.createdAt)}
                   </span>
                 </div>
 

@@ -1,3 +1,6 @@
+/* For Hebrew text */
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap");
+
 :root {
   /* Yahalom unit colors - silver theme with complementary colors */
   --primary-silver: #c0c0c0; /* Silver - main color of Yahalom unit */
@@ -33,9 +36,6 @@ body,
   padding: 0;
   box-sizing: border-box;
 }
-
-/* For Hebrew text */
-@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap");
 
 /* Utility classes */
 .text-center {

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import CandleModel from "../../../Models/CandleModel";
 import candleService from "../../../Services/CandleService";
 import { useState } from "react";
+import { CandleImage } from "../CandleImage/CandleImage";
 
 interface AddCandleProps {
   onClose: (show: boolean) => void;
@@ -18,6 +19,17 @@ export function AddCandle({
     useState(false);
   const [isSubmitting, setIsSubmitting] =
     useState(false);
+  const [textLength, setTextLength] = useState(0);
+  const MAX_TEXT_LENGTH = 256;
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const text = e.target.value;
+    if (text.length <= MAX_TEXT_LENGTH) {
+      setTextLength(text.length);
+    }
+  };
 
   const sendCandle = async (
     candle: CandleModel
@@ -51,10 +63,7 @@ export function AddCandle({
           <FaTimes />
         </button>
         <div className="candle">
-          <div className="flame">
-            <div className="inner-flame"></div>
-          </div>
-          <div className="wax"></div>
+          <CandleImage />
         </div>
         {isSubmitted ? (
           <div className="success-message">
@@ -78,15 +87,31 @@ export function AddCandle({
             </div>
             <div className="input-group">
               <textarea
-                {...register("text")}
+                {...register("text", {
+                  maxLength: MAX_TEXT_LENGTH,
+                  onChange: handleTextChange,
+                })}
                 className="input"
                 placeholder=" "
                 aria-label="Message text"
                 rows={4}
+                maxLength={MAX_TEXT_LENGTH}
               />
               <label className="label">
                 טקסט
               </label>
+              <div className="character-counter">
+                <span
+                  className={
+                    textLength >
+                    MAX_TEXT_LENGTH * 0.9
+                      ? "warning"
+                      : ""
+                  }
+                >
+                  {textLength}/{MAX_TEXT_LENGTH}
+                </span>
+              </div>
             </div>
             <button
               type="submit"

@@ -3,19 +3,16 @@ class CandleModel {
   writerName: string;
   text: string;
   createdAt: string;
-  status: "Pending" | "Approved" | "Rejected";
-  approvedAt?: Date;
+  status: string;
+  approvedAt?: string;
 
   constructor(
     id: string,
     writerName: string,
     text: string,
     createdAt: string,
-    status:
-      | "Pending"
-      | "Approved"
-      | "Rejected" = "Pending",
-    approvedAt?: Date
+    status: string,
+    approvedAt?: string
   ) {
     this.id = id;
     this.writerName = writerName;

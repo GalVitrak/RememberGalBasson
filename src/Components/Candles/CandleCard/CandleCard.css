@@ -1,112 +1,290 @@
 .CandleCard {
-  background-color: var(--primary-silver);
+  border: 5px solid var(--primary-silver);
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
   margin: 10px;
-  width: 300px;
-  height: 300px;
+  width: 800px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
 }
 
 .candle-container {
+  background-color: var(--secondary-silver);
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.candleImage {
+  width: 10%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.candle-header {
+  width: 100%;
+  height: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
-/* Candle styles */
-.candle-image {
-  margin-bottom: 15px;
+.candle-header__name {
+  text-align: left;
+  flex: 1;
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
 }
 
-.candle {
-  position: relative;
-  height: 120px;
-  width: 50px;
-  margin: 0 auto;
-}
-
-.wax {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100px;
-  background: linear-gradient(
-    to bottom,
-    #f9f4e1,
-    #eae0c8
-  );
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.flame {
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 25px;
-  height: 50px;
-  background: #ff9800;
-  border-radius: 50% 50% 20% 20%;
-  box-shadow: 0 0 15px #ff9800, 0 0 30px #ff9800;
-  animation: flicker 1s infinite alternate;
-}
-
-.inner-flame {
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 25px;
-  background: #ffeb3b;
-  border-radius: 50% 50% 20% 20%;
+.candle-header__date {
+  text-align: end;
+  flex: 1;
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--text-dark);
   opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
-@keyframes flicker {
-  0% {
-    transform: translateX(-50%) scale(0.9, 1.1);
-    box-shadow: 0 0 15px #ff9800, 0 0 30px #ff9800;
+.candle-body {
+  padding: 0 20px;
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.candle-body__text {
+  font-size: 14px;
+  text-align: right;
+  font-weight: normal;
+  color: var(--text-dark);
+  word-wrap: break-word;
+  width: 100%;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  white-space: normal;
+}
+
+.candleImage {
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Large Tablets & Folding Devices */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .CandleCard {
+    width: 85% !important;
+    max-width: 700px !important;
+    min-width: unset !important;
+    margin: 8px auto !important;
+    padding: 18px !important;
+    box-sizing: border-box !important;
   }
-  25% {
-    transform: translateX(-51%) scale(1, 0.9);
-    box-shadow: 0 0 12px #ff9800, 0 0 25px #ff9800;
+
+  .candleImage {
+    width: 15% !important;
+    min-width: 80px !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-  50% {
-    transform: translateX(-49%) scale(1.1, 0.9);
-    box-shadow: 0 0 18px #ff9800, 0 0 35px #ff9800;
+
+  /* Force candle centering on tablets */
+  .candleImage .candle-image {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px !important;
   }
-  75% {
-    transform: translateX(-50%) scale(0.9, 1);
-    box-shadow: 0 0 14px #ff9800, 0 0 28px #ff9800;
+
+  .candleImage .candle-container {
+    justify-content: flex-end !important;
+    align-items: center !important;
   }
-  100% {
-    transform: translateX(-50%) scale(1, 1.1);
-    box-shadow: 0 0 16px #ff9800, 0 0 32px #ff9800;
+
+  .candle-container {
+    flex: 1 !important;
+    width: auto !important;
+    min-height: 140px !important;
+  }
+
+  .candle-header {
+    padding: 0 12px !important;
+  }
+
+  .candle-header__name {
+    font-size: 18px !important;
+  }
+
+  .candle-header__date {
+    font-size: 13px !important;
+  }
+
+  .candle-body {
+    padding: 0 12px !important;
+  }
+
+  .candle-body__text {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
   }
 }
 
-/* Responsive adjustments */
-@media (max-height: 600px) {
-  .candle {
-    height: 90px;
-    width: 40px;
+/* Mobile & Small Tablets */
+@media (max-width: 768px) {
+  .CandleCard {
+    width: 95% !important;
+    max-width: 95% !important;
+    min-width: unset !important;
+    margin: 5px auto !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
+    flex-direction: row !important;
   }
 
-  .wax {
-    height: 75px;
+  .candleImage {
+    width: 15% !important;
+    min-width: 60px !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
-  .flame {
-    top: -20px;
-    width: 20px;
-    height: 40px;
+  /* Force candle centering on mobile */
+  .candleImage .candle-image {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px !important;
   }
 
-  .inner-flame {
-    top: 6px;
-    width: 10px;
-    height: 20px;
+  .candleImage .candle-container {
+    justify-content: flex-end !important;
+    align-items: center !important;
+    height: 80px !important;
+    width: 40px !important;
+    position: relative !important;
+  }
+
+  .candle-container {
+    flex: 1 !important;
+    width: auto !important;
+    min-height: 120px !important;
+  }
+
+  .candle-header {
+    padding: 0 8px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .candle-header__name {
+    font-size: 16px !important;
+    flex: 2 !important;
+    min-width: 0 !important;
+  }
+
+  .candle-header__date {
+    font-size: 12px !important;
+    flex: 1 !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    margin-left: 10px !important;
+  }
+
+  .candle-body {
+    padding: 0 8px !important;
+    width: 100% !important;
+  }
+
+  .candle-body__text {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .CandleCard {
+    width: 98% !important;
+    max-width: 98% !important;
+    margin: 3px auto !important;
+    padding: 12px !important;
+    min-height: 140px !important;
+  }
+
+  .candleImage {
+    width: 20% !important;
+    min-width: 50px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Force candle centering on small mobile */
+  .candleImage .candle-image {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px !important;
+  }
+
+  .candleImage .candle-container {
+    justify-content: flex-end !important;
+    align-items: center !important;
+    height: 70px !important;
+    width: 35px !important;
+    position: relative !important;
+  }
+
+  .candle-container {
+    min-height: 100px !important;
+  }
+
+  .candle-header {
+    padding: 0 5px !important;
+    height: auto !important;
+    min-height: 30px !important;
+  }
+
+  .candle-header__name {
+    font-size: 14px !important;
+  }
+
+  .candle-header__date {
+    font-size: 11px !important;
+    margin-left: 5px !important;
+  }
+
+  .candle-body {
+    padding: 0 5px !important;
+  }
+
+  .candle-body__text {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
   }
 }

@@ -60,11 +60,10 @@
 }
 
 .candlePage-list {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(300px, 1fr)
-  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 2rem;
   width: 100%;
   padding: 1rem;
@@ -89,21 +88,175 @@
   background: rgba(220, 53, 69, 0.1);
 }
 
+/* Large Tablets & Folding Devices */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .CandlePage {
+    padding: 1.5rem 1rem;
+  }
+
+  .CandlePage__header {
+    max-width: 900px;
+    padding: 0 2rem;
+  }
+
+  .CandlePage__header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .candlePage-container {
+    gap: 1.5rem;
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .addCandle-button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    max-width: 400px;
+  }
+
+  .candlePage-list {
+    gap: 1.5rem;
+    padding: 0 1rem;
+    max-width: 100%;
+  }
+
+  /* Tablet-specific CandleCard sizing */
+  .candlePage-list .CandleCard {
+    width: 85% !important;
+    max-width: 700px !important;
+    margin: 0 auto !important;
+  }
+
+  .loading,
+  .error,
+  .empty-state {
+    margin: 0 2rem;
+    padding: 2rem;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Mobile & Small Tablets */
 @media (max-width: 768px) {
   .CandlePage {
-    padding: 1rem;
+    padding: 1rem 0.5rem;
+    overflow-x: hidden;
+  }
+
+  .CandlePage__header {
+    max-width: 100%;
+    padding: 0 1rem;
   }
 
   .CandlePage__header h1 {
     font-size: 2rem;
+    margin-bottom: 0.5rem;
   }
 
   .subtitle {
     font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .candlePage-container {
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .addCandle-container {
+    margin-bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .addCandle-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+    width: auto;
+    max-width: 90%;
   }
 
   .candlePage-list {
-    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Ensure CandleCard takes 95% width on mobile */
+  .candlePage-list .CandleCard {
+    width: 95% !important;
+    max-width: 95% !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+  }
+
+  .loading,
+  .error,
+  .empty-state {
+    margin: 0 1rem;
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .CandlePage {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .CandlePage__header {
+    padding: 0 0.5rem;
+  }
+
+  .CandlePage__header h1 {
+    font-size: 1.75rem;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .addCandle-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    border-radius: 25px;
+  }
+
+  .candlePage-list {
+    padding: 0 0.25rem;
+    gap: 0.75rem;
+  }
+
+  /* Ensure CandleCard takes full available width */
+  .candlePage-list .CandleCard {
+    width: 98% !important;
+    max-width: 98% !important;
+    min-width: unset !important;
+  }
+
+  .loading,
+  .error,
+  .empty-state {
+    margin: 0 0.5rem;
+    padding: 1rem;
+    font-size: 0.9rem;
   }
 }
 
