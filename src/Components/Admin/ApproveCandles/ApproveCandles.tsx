@@ -26,7 +26,10 @@ export function ApproveCandles(): React.ReactElement {
   const candlesQuery = useMemo(() => {
     return query(
       collection(db, "candles"),
-      where("status", "==", "Pending")
+      where("status", "in", [
+        "Pending",
+        "Reported",
+      ])
     );
   }, []);
 

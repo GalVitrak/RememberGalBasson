@@ -4,6 +4,7 @@ import { functions } from "../../firebase-config";
 import cyber from "../Utils/cyber";
 import { AuthActionType } from "../Context/AuthState";
 import { authStore } from "../Context/AuthState";
+import { EventType } from "firebase/database";
 
 class AdminService {
   public async login(
@@ -105,6 +106,31 @@ class AdminService {
     }
   }
 
+  public async addEventType(
+    eventType: EventType
+  ): Promise<void> {
+    try {
+      console.log(
+        "Adding event type:",
+        eventType
+      );
+      const addEventType = httpsCallable(
+        functions,
+        "addEventType"
+      );
+      const response = await addEventType({
+        eventType,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(
+        "Error adding event type:",
+        error
+      );
+      throw error;
+    }
+  }
+
   public async addForbiddenWords(
     words: string[]
   ): Promise<{
@@ -145,7 +171,80 @@ class AdminService {
       throw error;
     }
   }
+
+  public async addEvent(
+    eventData: any
+  ): Promise<void> {
+    try {
+      console.log("Adding event:", eventData);
+
+      const addEvent = httpsCallable(
+        functions,
+        "addEvent"
+      );
+
+      const response = await addEvent({
+        event: eventData,
+      });
+
+      console.log(
+        "Event added successfully:",
+        response.data
+      );
+    } catch (error) {
+      console.error("Error adding event:", error);
+      throw error;
+    }
+  }
+
+  public async addEventType(eventTypeData: {
+    name: string;
+    description: string;
+    imageData: {
+      fileName: string;
+      mimeType: string;
+      base64Data: string;
+    };
+  }): Promise<{
+    success: boolean;
+    message: string;
+    id: string;
+  }> {
+    try {
+      console.log(
+        "Adding event type:",
+        eventTypeData
+      );
+
+      const addEventType = httpsCallable(
+        functions,
+        "addEventType"
+      );
+
+      const response = await addEventType(
+        eventTypeData
+      );
+
+      console.log(
+        "Event type added successfully:",
+        response.data
+      );
+
+      return response.data as {
+        success: boolean;
+        message: string;
+        id: string;
+      };
+    } catch (error) {
+      console.error(
+        "Error adding event type:",
+        error
+      );
+      throw error;
+    }
+  }
 }
 
 const adminService = new AdminService();
+export { adminService };
 export default adminService;

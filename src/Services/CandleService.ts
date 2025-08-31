@@ -17,6 +17,16 @@ class CandleService {
     );
     await addCandle({ candle });
   }
+
+  public async reportCandle(
+    candleId: string
+  ): Promise<void> {
+    const reportCandle = httpsCallable(
+      functions,
+      "reportCandle"
+    );
+    await reportCandle({ candleId });
+  }
 }
 
 const candleService = new CandleService();

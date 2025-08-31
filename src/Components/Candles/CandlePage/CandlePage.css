@@ -1,18 +1,25 @@
 .CandlePage {
-  min-height: 100vh;
+  min-height: 100%;
   background: linear-gradient(
     180deg,
     #f8f9fa 0%,
     #e9ecef 100%
   );
   color: #495057;
-  padding: 2rem;
+  padding: 1rem;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
 }
 
 .CandlePage__header {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .CandlePage__header h1 {
@@ -35,6 +42,8 @@
   flex-direction: column;
   gap: 2rem;
   align-items: center;
+  min-height: fit-content;
+  height: auto;
 }
 
 .addCandle-container {
@@ -63,10 +72,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 2rem;
   width: 100%;
+  max-width: 100%;
   padding: 1rem;
+  min-height: fit-content;
+  overflow-x: hidden;
+  overflow-y: visible;
+  box-sizing: border-box;
 }
 
 .loading,
@@ -194,6 +208,8 @@
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    overflow: visible;
+    min-height: auto;
   }
 
   /* Ensure CandleCard takes 95% width on mobile */

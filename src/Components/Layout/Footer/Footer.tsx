@@ -1,3 +1,4 @@
+import { CandleImage } from "../../Candles/CandleImage/CandleImage";
 import "./Footer.css";
 
 function Footer(): React.ReactElement {

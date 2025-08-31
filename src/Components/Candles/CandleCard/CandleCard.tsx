@@ -1,6 +1,7 @@
 import CandleModel from "../../../Models/CandleModel";
 import "./CandleCard.css";
 import { CandleImage } from "../CandleImage/CandleImage";
+import candleService from "../../../Services/CandleService";
 
 interface CandleCardProps {
   candle: CandleModel;
@@ -18,6 +19,11 @@ export function CandleCard({
       day: "numeric",
     }
   );
+
+  const reportCandle = () => {
+    candleService.reportCandle(candle.id);
+  };
+
   return (
     <div className="CandleCard">
       <div className="candle-container">
@@ -37,6 +43,11 @@ export function CandleCard({
       </div>
       <div className="candleImage">
         <CandleImage />
+        <div className="report-button">
+          <button onClick={reportCandle}>
+            דווחו על נר
+          </button>
+        </div>
       </div>
     </div>
   );

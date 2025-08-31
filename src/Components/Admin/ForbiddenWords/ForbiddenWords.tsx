@@ -109,7 +109,7 @@ export function ForbiddenWords(): React.ReactElement {
         width={800}
         height={500}
         style={{ direction: "rtl" }}
-        destroyOnClose={true}
+        destroyOnHidden={true}
       >
         <AddForbiddenWords />
       </Modal>

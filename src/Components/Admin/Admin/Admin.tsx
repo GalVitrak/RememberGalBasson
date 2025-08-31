@@ -53,7 +53,7 @@ function Admin(): React.ReactElement {
           <h3>ניהול אירועים</h3>
           <p>הוספת אירועים חדשים ללוח השנה</p>
           <Link
-            to="/admin/add-event"
+            to="/admin/event-managment"
             className="admin-button"
           >
             הוסף אירוע

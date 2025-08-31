@@ -10,7 +10,6 @@ import "./CandlePage.css";
 import {
   useState,
   useMemo,
-  useEffect,
 } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { CandleCard } from "../CandleCard/CandleCard";
@@ -19,17 +18,14 @@ import { AddCandle } from "../AddCandle/AddCandle";
 export function CandlePage(): React.ReactElement {
   const [showAddCandle, setShowAddCandle] =
     useState(false);
-  const [candles, setCandles] = useState<
-    CandleModel[]
-  >([]);
 
   const candlesQuery = useMemo(() => {
     return query(
       collection(db, "candles"),
       where("status", "==", "Approved"),
-      orderBy("createdAt", "asc")
+      orderBy("createdAt", "desc")
     );
-  }, [candles]);
+  }, []);
 
   const [candlesSnapshot, loading, error] =
     useCollection(candlesQuery);
@@ -48,11 +44,6 @@ export function CandlePage(): React.ReactElement {
       );
     });
   }, [candlesSnapshot]);
-
-  useEffect(() => {
-    setCandles(approvedCandles);
-    console.log(approvedCandles);
-  }, [approvedCandles, loading]);
 
   return (
     <div className="CandlePage">

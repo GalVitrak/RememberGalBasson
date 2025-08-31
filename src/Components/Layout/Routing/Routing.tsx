@@ -9,6 +9,9 @@ import { useEffect, useState } from "react";
 import { CandlePage } from "../../Candles/CandlePage/CandlePage";
 import { ApproveCandles } from "../../Admin/ApproveCandles/ApproveCandles";
 import { ForbiddenWords } from "../../Admin/ForbiddenWords/ForbiddenWords";
+import { EventManagment } from "../../Admin/EventManagment/EventManagment";
+import { ManageEventTypes } from "../../Admin/ManageEventTypes/ManageEventTypes";
+import { Events } from "../../Events/Events/Events";
 
 function Routing(): React.ReactElement {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -45,6 +48,10 @@ function Routing(): React.ReactElement {
           path="/candles"
           element={<CandlePage />}
         />
+        <Route
+          path="/events"
+          element={<Events />}
+        />
         {/* 404 route - must be last */}
         <Route path="*" element={<NotFound />} />
 
@@ -54,12 +61,12 @@ function Routing(): React.ReactElement {
           element={<ApproveCandles />}
         />
         <Route
-          path="/admin/add-event"
-          element={
-            <div>
-              Add Event Component (Coming Soon)
-            </div>
-          }
+          path="/admin/event-managment"
+          element={<EventManagment />}
+        />
+        <Route
+          path="/admin/manage-event-types"
+          element={<ManageEventTypes />}
         />
         <Route
           path="/admin/add-images"
