@@ -16,22 +16,15 @@ function Admin(): React.ReactElement {
 
   // Ensure auth state is refreshed when Admin component mounts
   useEffect(() => {
-    console.log(
-      "Admin component mounted, refreshing auth state"
-    );
     refreshAuthState();
   }, []);
 
   const handleLogout = async () => {
     try {
-      console.log("Logout button clicked");
       await adminService.logout();
       navigate("/");
     } catch (error) {
-      console.error(
-        "Error during logout:",
-        error
-      );
+      // Handle logout error silently
     }
   };
 
@@ -56,17 +49,7 @@ function Admin(): React.ReactElement {
             to="/admin/event-managment"
             className="admin-button"
           >
-            הוסף אירוע
-          </Link>
-        </div>
-        <div className="admin-section">
-          <h3>ניהול מילים אסורות</h3>
-          <p>הוספת מילים אסורות למסנן הנרות</p>
-          <Link
-            to="/admin/forbidden-words"
-            className="admin-button"
-          >
-            נהל מילים אסורות
+            נהל אירועים
           </Link>
         </div>
 
@@ -80,15 +63,14 @@ function Admin(): React.ReactElement {
             אשר נרות
           </Link>
         </div>
-
         <div className="admin-section">
-          <h3>ניהול גלריה</h3>
-          <p>העלאת תמונות חדשות לגלריה</p>
+          <h3>ניהול מילים אסורות</h3>
+          <p>הוספת מילים אסורות למסנן הנרות</p>
           <Link
-            to="/admin/add-images"
+            to="/admin/forbidden-words"
             className="admin-button"
           >
-            הוסף תמונות
+            נהל מילים אסורות
           </Link>
         </div>
       </div>

@@ -68,6 +68,23 @@
   box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
 }
 
+.input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
+  width: 100%;
+  height: auto;
+  min-height: unset;
+  padding: 1rem;
+  margin: 0;
+  line-height: normal;
+  box-sizing: border-box;
+}
+
+.input.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.2);
+}
+
 .label {
   position: absolute;
   top: 1rem;
@@ -138,4 +155,15 @@
 .character-counter .warning {
   color: #f44336;
   font-weight: bold;
+}
+
+/* Error Message */
+.error-message {
+  display: block;
+  margin-top: 5px;
+  color: #dc3545;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: right;
+  direction: rtl;
 }

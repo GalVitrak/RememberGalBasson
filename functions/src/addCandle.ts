@@ -4,7 +4,6 @@ import { db } from "./index";
 const addCandle = functions.https.onCall(
   async (data, context) => {
     const { candle } = data;
-    console.log(candle);
     try {
       await db.collection("candles").add(candle);
     } catch (error) {

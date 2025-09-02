@@ -6,12 +6,12 @@ import {
   query,
   doc,
   deleteDoc,
-  addDoc,
 } from "firebase/firestore";
-import { adminService } from "../../../Services/AdminService";
+import eventService from "../../../Services/EventService";
 import "./ManageEventTypes.css";
 import { useMemo } from "react";
 import { db } from "../../../../firebase-config";
+import { Modal } from "antd";
 
 interface EventType {
   id: string;
@@ -41,6 +41,21 @@ export function ManageEventTypes(): React.ReactElement {
   const [imagePreview, setImagePreview] =
     useState<string | null>(null);
 
+  // Edit modal state
+  const [editModalOpen, setEditModalOpen] =
+    useState(false);
+  const [editingEventType, setEditingEventType] =
+    useState<EventType | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editDescription, setEditDescription] =
+    useState("");
+  const [isUpdating, setIsUpdating] =
+    useState(false);
+  const [editSelectedFile, setEditSelectedFile] =
+    useState<File | null>(null);
+  const [editImagePreview, setEditImagePreview] =
+    useState<string | null>(null);
+
   const handleImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -55,6 +70,25 @@ export function ManageEventTypes(): React.ReactElement {
     } else {
       setSelectedFile(null);
       setImagePreview(null);
+    }
+  };
+
+  const handleEditImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setEditSelectedFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditImagePreview(
+          reader.result as string
+        );
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setEditSelectedFile(null);
+      setEditImagePreview(null);
     }
   };
 
@@ -148,20 +182,11 @@ export function ManageEventTypes(): React.ReactElement {
         },
       };
 
-      console.log(
-        "Sending event type data to AdminService"
-      );
-
-      // Call through AdminService
+      // Call through EventService
       const response =
-        await adminService.addEventType(
+        await eventService.addEventType(
           eventTypeData
         );
-
-      console.log(
-        "Event type added successfully:",
-        response
-      );
 
       // Clear form
       setNewTypeName("");
@@ -175,15 +200,80 @@ export function ManageEventTypes(): React.ReactElement {
       ) as HTMLInputElement;
       if (fileInput) fileInput.value = "";
     } catch (error) {
-      console.error(
-        "Error adding event type:",
-        error
-      );
       alert(
         "שגיאה בהוספת סוג האירוע. אנא נסה שוב."
       );
     } finally {
       setIsAdding(false);
+    }
+  };
+
+  const openEditModal = (
+    eventType: EventType
+  ) => {
+    setEditingEventType(eventType);
+    setEditName(eventType.name);
+    setEditDescription(eventType.description);
+    setEditSelectedFile(null);
+    setEditImagePreview(null);
+    setEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    setEditingEventType(null);
+    setEditName("");
+    setEditDescription("");
+    setEditSelectedFile(null);
+    setEditImagePreview(null);
+  };
+
+  const updateEventType = async () => {
+    if (!editingEventType || !editName.trim()) {
+      alert("נא למלא את כל השדות הנדרשים");
+      return;
+    }
+
+    try {
+      setIsUpdating(true);
+
+      let updateData: any = {
+        id: editingEventType.id,
+        name: editName.trim(),
+        description: editDescription.trim(),
+      };
+
+      // If a new image is selected, add image data
+      if (editSelectedFile) {
+        const base64String =
+          await convertFileToBase64(
+            editSelectedFile
+          );
+        updateData.imageData = {
+          fileName: editSelectedFile.name,
+          mimeType: editSelectedFile.type,
+          base64Data: base64String,
+        };
+        updateData.oldImageId =
+          editingEventType.defaultImageId;
+      }
+
+      await eventService.updateEventType(
+        updateData
+      );
+
+      // Close modal
+      closeEditModal();
+    } catch (error) {
+      console.error(
+        "Error updating event type:",
+        error
+      );
+      alert(
+        "שגיאה בעדכון סוג האירוע. אנא נסה שוב."
+      );
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -226,26 +316,32 @@ export function ManageEventTypes(): React.ReactElement {
 
       <div className="add-type-section">
         <div className="add-type-form">
-          <input
-            type="text"
-            placeholder="שם סוג האירוע"
-            value={newTypeName}
-            onChange={(e) =>
-              setNewTypeName(e.target.value)
-            }
-            className="type-name-input"
-          />
-          <input
-            type="text"
-            placeholder="תיאור סוג האירוע"
-            value={newTypeDescription}
-            onChange={(e) =>
-              setNewTypeDescription(
-                e.target.value
-              )
-            }
-            className="type-description-input"
-          />
+          <div className="form-row">
+            <input
+              type="text"
+              placeholder="שם סוג האירוע"
+              value={newTypeName}
+              onChange={(e) =>
+                setNewTypeName(e.target.value)
+              }
+              className="type-name-input"
+            />
+          </div>
+
+          <div className="form-row">
+            <input
+              type="text"
+              placeholder="תיאור סוג האירוע"
+              value={newTypeDescription}
+              onChange={(e) =>
+                setNewTypeDescription(
+                  e.target.value
+                )
+              }
+              className="type-description-input"
+            />
+          </div>
+
           <div className="image-upload-section">
             <label className="image-upload-label">
               תמונת ברירת מחדל *
@@ -282,6 +378,7 @@ export function ManageEventTypes(): React.ReactElement {
               </div>
             )}
           </div>
+
           <button
             onClick={addEventType}
             disabled={
@@ -355,6 +452,20 @@ export function ManageEventTypes(): React.ReactElement {
 
                 <div className="event-type-actions">
                   <button
+                    className="edit-btn"
+                    onClick={() =>
+                      openEditModal(eventType)
+                    }
+                    disabled={
+                      isProcessing[eventType.id]
+                    }
+                  >
+                    <span className="btn-icon">
+                      ✏️
+                    </span>
+                    <span>ערוך</span>
+                  </button>
+                  <button
                     className="delete-btn"
                     onClick={() =>
                       deleteEventType(
@@ -368,12 +479,136 @@ export function ManageEventTypes(): React.ReactElement {
                     <span className="btn-icon">
                       ✕
                     </span>
+                    <span>מחק</span>
                   </button>
                 </div>
               </div>
             ))}
           </div>
         )}
+
+      {/* Edit Modal */}
+      <Modal
+        open={editModalOpen}
+        onCancel={closeEditModal}
+        footer={null}
+        title="עריכת סוג אירוע"
+        centered
+        width={600}
+        style={{ direction: "rtl" }}
+        destroyOnHidden
+      >
+        <div className="edit-modal-content">
+          <div className="edit-form">
+            <div className="edit-form-row">
+              <label className="edit-form-label">
+                שם סוג האירוע
+              </label>
+              <input
+                type="text"
+                value={editName}
+                onChange={(e) =>
+                  setEditName(e.target.value)
+                }
+                placeholder="שם סוג האירוע"
+              />
+            </div>
+
+            <div className="edit-form-row">
+              <label className="edit-form-label">
+                תיאור סוג האירוע
+              </label>
+              <textarea
+                value={editDescription}
+                onChange={(e) =>
+                  setEditDescription(
+                    e.target.value
+                  )
+                }
+                placeholder="תיאור סוג האירוע"
+                rows={4}
+              />
+            </div>
+
+            <div className="edit-form-row">
+              <label className="edit-form-label">
+                תמונת ברירת מחדל
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleEditImageChange}
+                className="image-upload-input"
+              />
+              <div className="edit-image-preview-section">
+                {editImagePreview ? (
+                  <div className="image-preview">
+                    <img
+                      src={editImagePreview}
+                      alt="תצוגה מקדימה חדשה"
+                      className="preview-image"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => {
+                        setEditImagePreview(null);
+                        setEditSelectedFile(null);
+                        const fileInput =
+                          document.querySelector(
+                            '.edit-modal-content input[type="file"]'
+                          ) as HTMLInputElement;
+                        if (fileInput)
+                          fileInput.value = "";
+                      }}
+                    >
+                      הסר תמונה חדשה
+                    </button>
+                  </div>
+                ) : editingEventType?.defaultImageUrl ? (
+                  <div className="current-image-preview">
+                    <span className="current-image-label">
+                      תמונה נוכחית:
+                    </span>
+                    <img
+                      src={
+                        editingEventType.defaultImageUrl
+                      }
+                      alt="תמונה נוכחית"
+                      className="preview-image"
+                    />
+                  </div>
+                ) : (
+                  <span className="no-image-text">
+                    אין תמונה נוכחית
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="edit-form-buttons">
+              <button
+                className="save-btn"
+                onClick={updateEventType}
+                disabled={
+                  !editName.trim() || isUpdating
+                }
+              >
+                {isUpdating
+                  ? "שומר..."
+                  : "שמור שינויים"}
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={closeEditModal}
+                disabled={isUpdating}
+              >
+                ביטול
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

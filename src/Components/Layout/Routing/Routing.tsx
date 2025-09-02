@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 import { CandlePage } from "../../Candles/CandlePage/CandlePage";
 import { ApproveCandles } from "../../Admin/ApproveCandles/ApproveCandles";
 import { ForbiddenWords } from "../../Admin/ForbiddenWords/ForbiddenWords";
-import { EventManagment } from "../../Admin/EventManagment/EventManagment";
+import { EventManagement } from "../../Admin/EventManagement/EventManagement";
 import { ManageEventTypes } from "../../Admin/ManageEventTypes/ManageEventTypes";
 import { Events } from "../../Events/Events/Events";
+import { Gallery } from "../../Events/Gallery/Gallery";
 
 function Routing(): React.ReactElement {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -52,34 +53,32 @@ function Routing(): React.ReactElement {
           path="/events"
           element={<Events />}
         />
-        {/* 404 route - must be last */}
-        <Route path="*" element={<NotFound />} />
-
-        <Route path="/" element={<Admin />} />
+        <Route
+          path="/events/:eventId"
+          element={<Gallery />}
+        />
+        <Route
+          path="/gallery"
+          element={<Gallery />}
+        />
         <Route
           path="/admin/approve-candles"
           element={<ApproveCandles />}
         />
         <Route
           path="/admin/event-managment"
-          element={<EventManagment />}
+          element={<EventManagement />}
         />
         <Route
           path="/admin/manage-event-types"
           element={<ManageEventTypes />}
         />
         <Route
-          path="/admin/add-images"
-          element={
-            <div>
-              Add Images Component (Coming Soon)
-            </div>
-          }
-        />
-        <Route
           path="/admin/forbidden-words"
           element={<ForbiddenWords />}
         />
+        {/* 404 route - must be last */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

@@ -4,7 +4,6 @@ import { db } from "./index";
 const reportCandle = functions.https.onCall(
   async (data, context) => {
     const { candleId } = data;
-    console.log(candleId);
     try {
       await db
         .collection("candles")

@@ -62,10 +62,6 @@ export function AddForbiddenWords(): React.ReactElement {
 
     try {
       // TODO: Implement API call to save forbidden words
-      console.log(
-        "Saving forbidden words:",
-        validWords.map((w) => w.word)
-      );
 
       // Simulate API call
       await new Promise((resolve) =>
@@ -87,10 +83,6 @@ export function AddForbiddenWords(): React.ReactElement {
         3000
       );
     } catch (error) {
-      console.error(
-        "Error saving forbidden words:",
-        error
-      );
       alert("שגיאה בשמירת המילים");
     } finally {
       setIsSubmitting(false);

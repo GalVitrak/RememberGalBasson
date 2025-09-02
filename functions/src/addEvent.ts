@@ -5,13 +5,7 @@ import { db } from "./index";
 
 const addEvent = functions.https.onCall(
   async (data, context) => {
-    console.log(
-      "Function called with data:",
-      data
-    );
-
     const { event } = data;
-    console.log("Received event data:", event);
 
     // Validate required fields
     if (!event) {
@@ -22,6 +16,7 @@ const addEvent = functions.https.onCall(
       !event.title ||
       !event.type ||
       !event.date ||
+      !event.time ||
       !event.description ||
       !event.location
     ) {
@@ -36,21 +31,14 @@ const addEvent = functions.https.onCall(
 
       // Handle image upload if image data is provided
       if (event.imageData) {
-        console.log("Processing image data...");
         try {
           // Check if using default image
           if (event.imageData.useDefaultImage) {
-            console.log(
-              "Using default event type image"
-            );
+           
             coverImageId =
               event.imageData.defaultImageId;
             coverImageUrl =
               event.imageData.defaultImageUrl;
-            console.log("Default image set:", {
-              coverImageId,
-              coverImageUrl,
-            });
           } else {
             // Handle custom image upload
             const {
@@ -59,11 +47,7 @@ const addEvent = functions.https.onCall(
               base64Data,
             } = event.imageData;
 
-            console.log("Image details:", {
-              fileName,
-              mimeType,
-              base64Length: base64Data?.length,
-            });
+     
 
             if (
               !fileName ||
@@ -87,10 +71,6 @@ const addEvent = functions.https.onCall(
               "base64"
             );
 
-            console.log(
-              "Image buffer created, size:",
-              imageBuffer.length
-            );
 
             // Get Firebase Storage bucket
             const bucket = admin
@@ -98,10 +78,7 @@ const addEvent = functions.https.onCall(
               .bucket();
             const file = bucket.file(imageId);
 
-            console.log(
-              "Uploading to storage path:",
-              imageId
-            );
+      
 
             // Upload the file
             await file.save(imageBuffer, {
@@ -110,9 +87,7 @@ const addEvent = functions.https.onCall(
               },
             });
 
-            console.log(
-              "File uploaded, making public..."
-            );
+   
 
             // Make the file publicly readable
             await file.makePublic();
@@ -121,10 +96,7 @@ const addEvent = functions.https.onCall(
             coverImageUrl = `https://storage.googleapis.com/${bucket.name}/${imageId}`;
             coverImageId = uniqueId;
 
-            console.log(
-              "Image uploaded successfully:",
-              { uniqueId, coverImageUrl }
-            );
+       
           }
         } catch (imageError) {
           console.error(
@@ -146,6 +118,7 @@ const addEvent = functions.https.onCall(
         title: event.title,
         type: event.type,
         date: event.date,
+        time: event.time, // Add time field
         description: event.description,
         location: event.location,
         locationLink: event.locationLink || "",
@@ -154,19 +127,11 @@ const addEvent = functions.https.onCall(
         createdAt: new Date(),
       };
 
-      console.log(
-        "Saving event to Firestore:",
-        eventToSave
-      );
 
       const docRef = await db
         .collection("events")
         .add(eventToSave);
 
-      console.log(
-        "Event saved with ID:",
-        docRef.id
-      );
 
       return {
         success: true,

@@ -1,7 +1,8 @@
 /* Events Component Styles */
 .Events {
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1800px;
+  width: 75%;
   margin: 0 auto;
   direction: rtl;
 }
@@ -107,7 +108,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 1800px) {
   .events-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 18px;

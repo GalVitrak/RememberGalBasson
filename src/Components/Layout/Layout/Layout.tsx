@@ -11,7 +11,6 @@ function Layout(): React.ReactElement {
 
   // Refresh auth state on mount and location changes
   useEffect(() => {
-    console.log("Layout: Refreshing auth state on location change or mount");
     refreshAuthState();
   }, [location]);
 

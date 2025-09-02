@@ -5,7 +5,6 @@ import cyber from "./cyber";
 const login = functions.https.onCall(
   async (data, context) => {
     const { username, password } = data;
-    console.log(username, password);
 
     const user = await db
       .collection("admin")

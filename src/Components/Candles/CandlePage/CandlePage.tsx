@@ -34,7 +34,6 @@ export function CandlePage(): React.ReactElement {
     if (!candlesSnapshot) return [];
     return candlesSnapshot.docs.map((doc) => {
       const data = doc.data();
-      console.log(data);
       return new CandleModel(
         doc.id,
         data.writerName,

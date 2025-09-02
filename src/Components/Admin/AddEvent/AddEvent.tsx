@@ -8,18 +8,23 @@ import {
   query,
 } from "firebase/firestore";
 import { db } from "../../../../firebase-config";
-import { adminService } from "../../../Services/AdminService";
+import eventService from "../../../Services/EventService";
 import EventTypeModel from "../../../Models/EventTypeModel";
 
 interface AddEventProps {
   isModal?: boolean;
+  onEventAdded?: () => void; // Callback to close modal
 }
 
 export function AddEvent({
   isModal = false,
+  onEventAdded,
 }: AddEventProps): React.ReactElement {
-  const { register, handleSubmit } =
-    useForm<EventModel>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EventModel>();
   const [isSubmitting, setIsSubmitting] =
     useState(false);
   const [imagePreview, setImagePreview] =
@@ -78,7 +83,7 @@ export function AddEvent({
       // Combine event description with event type description
       const combinedDescription =
         selectedEventType
-          ? `${selectedEventType.description}\n\n${formData.description}`
+          ? `${selectedEventType.description}. \n ${formData.description}`
           : formData.description;
 
       // Use default image if no custom image is provided
@@ -104,26 +109,15 @@ export function AddEvent({
         title: formData.title,
         type: formData.type, // This is the eventType name from the select
         date: formData.date,
+        time: formData.time, // Add time to the event data
         description: combinedDescription,
         location: formData.location,
         locationLink: formData.locationLink || "",
         imageData: finalImageData, // Send the image data (custom or default) to the backend
       };
 
-      console.log(
-        "Sending event data to Firebase function:",
-        {
-          ...eventData,
-          imageData: imageData
-            ? "Image data included"
-            : "No image",
-        }
-      );
-
       // Call the Firebase function through AdminService
-      await adminService.addEvent(eventData);
-
-      console.log("Event added successfully!");
+      await eventService.addEvent(eventData);
 
       // Reset form state
       setSelectedFile(null);
@@ -135,10 +129,20 @@ export function AddEvent({
       ) as HTMLInputElement;
       if (fileInput) fileInput.value = "";
 
-      // If in modal, you might want to close it here
-      // If standalone, you might want to navigate or show success message
+      // Reset the form
+      const form = document.querySelector("form");
+      if (form) {
+        (form as HTMLFormElement).reset();
+      }
+
+      // Show success message
+      alert("האירוע נוסף בהצלחה!");
+
+      // If in modal, close it by calling the callback
+      if (isModal && onEventAdded) {
+        onEventAdded();
+      }
     } catch (error) {
-      console.error("Error adding event:", error);
       // You might want to show an error message to the user here
       alert("שגיאה בהוספת האירוע. אנא נסה שוב.");
     } finally {
@@ -196,10 +200,19 @@ export function AddEvent({
           <input
             type="text"
             placeholder="הכנס כותרת האירוע"
+            className={
+              errors.title ? "error" : ""
+            }
             {...register("title", {
-              required: true,
+              required:
+                "כותרת האירוע היא שדה חובה",
             })}
           />
+          {errors.title && (
+            <span className="error-message">
+              {errors.title.message}
+            </span>
+          )}
         </div>
 
         <div className="form-row">
@@ -208,8 +221,12 @@ export function AddEvent({
               סוג האירוע
             </label>
             <select
+              className={
+                errors.type ? "error" : ""
+              }
               {...register("type", {
-                required: true,
+                required:
+                  "בחירת סוג אירוע היא שדה חובה",
               })}
               defaultValue=""
             >
@@ -225,6 +242,11 @@ export function AddEvent({
                 </option>
               ))}
             </select>
+            {errors.type && (
+              <span className="error-message">
+                {errors.type.message}
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -233,10 +255,42 @@ export function AddEvent({
             </label>
             <input
               type="date"
+              className={
+                errors.date ? "error" : ""
+              }
               {...register("date", {
-                required: true,
+                required:
+                  "תאריך האירוע הוא שדה חובה",
               })}
             />
+            {errors.date && (
+              <span className="error-message">
+                {errors.date.message}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label className="form-label required">
+              שעת האירוע
+            </label>
+            <input
+              type="time"
+              className={
+                errors.time ? "error" : ""
+              }
+              {...register("time", {
+                required:
+                  "שעת האירוע היא שדה חובה",
+              })}
+            />
+            {errors.time && (
+              <span className="error-message">
+                {errors.time.message}
+              </span>
+            )}
           </div>
         </div>
 
@@ -247,10 +301,19 @@ export function AddEvent({
           <textarea
             placeholder="הכנס תיאור מפורט של האירוע"
             rows={4}
+            className={
+              errors.description ? "error" : ""
+            }
             {...register("description", {
-              required: true,
+              required:
+                "תיאור האירוע הוא שדה חובה",
             })}
           />
+          {errors.description && (
+            <span className="error-message">
+              {errors.description.message}
+            </span>
+          )}
         </div>
 
         <div className="form-row">
@@ -261,10 +324,19 @@ export function AddEvent({
             <input
               type="text"
               placeholder="הכנס מיקום האירוע"
+              className={
+                errors.location ? "error" : ""
+              }
               {...register("location", {
-                required: true,
+                required:
+                  "מיקום האירוע הוא שדה חובה",
               })}
             />
+            {errors.location && (
+              <span className="error-message">
+                {errors.location.message}
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -273,7 +345,7 @@ export function AddEvent({
             </label>
             <input
               type="text"
-              placeholder="קישור למפה או אתר (אופציונלי)"
+              placeholder="https://maps.google.com/..."
               {...register("locationLink")}
             />
           </div>

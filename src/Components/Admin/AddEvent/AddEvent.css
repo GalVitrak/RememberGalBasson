@@ -18,7 +18,7 @@
   font-weight: 700;
   text-align: center;
   padding-bottom: 15px;
-  border-bottom: 2px solid #8b4513;
+  border-bottom: 2px solid #6c757d;
 }
 
 .AddEvent form {
@@ -39,6 +39,14 @@
   font-weight: 600;
   color: #333;
   font-size: 14px;
+}
+
+.error-message {
+  display: block;
+  margin-top: 5px;
+  color: #dc3545;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .AddEvent input[type="text"],
@@ -64,8 +72,23 @@
 .AddEvent select:focus,
 .AddEvent textarea:focus {
   outline: none;
-  border-color: #8b4513;
-  box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+  border-color: #6c757d;
+  box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
+}
+
+.AddEvent input[type="text"].error,
+.AddEvent input[type="date"].error,
+.AddEvent select.error,
+.AddEvent textarea.error {
+  border-color: #dc3545;
+}
+
+.AddEvent input[type="text"].error:focus,
+.AddEvent input[type="date"].error:focus,
+.AddEvent select.error:focus,
+.AddEvent textarea.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
 }
 
 .AddEvent select {
@@ -93,8 +116,8 @@
 }
 
 .AddEvent input[type="file"]:hover {
-  border-color: #8b4513;
-  background-color: rgba(139, 69, 19, 0.05);
+  border-color: #6c757d;
+  background-color: rgba(108, 117, 125, 0.05);
 }
 
 .AddEvent input[type="file"]:focus {
@@ -103,7 +126,7 @@
 
 .submit-button {
   width: 100%;
-  background-color: #8b4513;
+  background-color: #6c757d;
   color: white;
   border: none;
   padding: 15px 20px;
@@ -116,7 +139,7 @@
 }
 
 .submit-button:hover:not(:disabled) {
-  background-color: #a0522d;
+  background-color: #5a6268;
 }
 
 .submit-button:disabled {

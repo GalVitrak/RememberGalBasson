@@ -5,10 +5,7 @@ import { db } from "./index";
 
 const addEventType = functions.https.onCall(
   async (data, context) => {
-    console.log(
-      "Received event type data:",
-      data
-    );
+
 
     try {
       let defaultImageId = "";
@@ -16,9 +13,7 @@ const addEventType = functions.https.onCall(
 
       // Handle image upload if image data is provided
       if (data.imageData) {
-        console.log(
-          "Processing default image..."
-        );
+  
         const { fileName, mimeType, base64Data } =
           data.imageData;
 
@@ -62,10 +57,7 @@ const addEventType = functions.https.onCall(
         defaultImageUrl = `https://storage.googleapis.com/${bucket.name}/${imageId}`;
         defaultImageId = uniqueId;
 
-        console.log(
-          "Default image uploaded successfully:",
-          { defaultImageId, defaultImageUrl }
-        );
+    
       }
 
       // Create the event type object
@@ -77,18 +69,10 @@ const addEventType = functions.https.onCall(
         createdAt: new Date(),
       };
 
-      console.log(
-        "Saving event type to Firestore:",
-        eventTypeToSave
-      );
       const docRef = await db
         .collection("eventTypes")
         .add(eventTypeToSave);
 
-      console.log(
-        "Event type saved with ID:",
-        docRef.id
-      );
 
       return {
         success: true,

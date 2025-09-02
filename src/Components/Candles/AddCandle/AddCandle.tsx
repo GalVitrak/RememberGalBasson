@@ -13,8 +13,11 @@ interface AddCandleProps {
 export function AddCandle({
   onClose,
 }: AddCandleProps): React.ReactElement {
-  const { register, handleSubmit } =
-    useForm<CandleModel>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CandleModel>();
   const [isSubmitted, setIsSubmitted] =
     useState(false);
   const [isSubmitting, setIsSubmitting] =
@@ -75,31 +78,49 @@ export function AddCandle({
           >
             <div className="input-group">
               <input
-                className="input"
+                className={`input ${
+                  errors.writerName ? "error" : ""
+                }`}
                 type="text"
-                {...register("writerName")}
+                {...register("writerName", {
+                  required:
+                    "שם הכותב הוא שדה חובה",
+                })}
                 placeholder=" "
                 aria-label="Writer name"
               />
               <label className="label">
                 שם הכותב
               </label>
+              {errors.writerName && (
+                <span className="error-message">
+                  {errors.writerName.message}
+                </span>
+              )}
             </div>
             <div className="input-group">
               <textarea
                 {...register("text", {
+                  required: "טקסט הוא שדה חובה",
                   maxLength: MAX_TEXT_LENGTH,
                   onChange: handleTextChange,
                 })}
-                className="input"
+                className={`input ${
+                  errors.text ? "error" : ""
+                }`}
                 placeholder=" "
                 aria-label="Message text"
                 rows={4}
                 maxLength={MAX_TEXT_LENGTH}
               />
               <label className="label">
-                טקסט
+                הקדשה
               </label>
+              {errors.text && (
+                <span className="error-message">
+                  {errors.text.message}
+                </span>
+              )}
               <div className="character-counter">
                 <span
                   className={

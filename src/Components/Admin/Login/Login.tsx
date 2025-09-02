@@ -23,19 +23,12 @@ function Login(): React.ReactElement {
     setError(null);
 
     try {
-      console.log(
-        "Login form submitted with username:",
-        credentials.username
-      );
+
       await adminService.login(credentials);
 
       // Check if login was successful
       const isLoggedIn =
         authStore.getState().loggedIn;
-      console.log(
-        "Login status after attempt:",
-        isLoggedIn ? "Success" : "Failed"
-      );
 
       if (isLoggedIn) {
         // Navigate to admin page instead of reloading
@@ -46,7 +39,6 @@ function Login(): React.ReactElement {
         );
       }
     } catch (error) {
-      console.error("Login error:", error);
       setError(
         "שגיאה בהתחברות. אנא נסה שוב מאוחר יותר."
       );

@@ -7,7 +7,7 @@ import "./Events.css";
 import { useMemo } from "react";
 import { db } from "../../../../firebase-config";
 import { useCollection } from "react-firebase-hooks/firestore";
-import EventModel from "../../../Models/EventModel";
+
 import { EventCard } from "../EventCard/EventCard";
 
 export function Events(): React.ReactElement {
@@ -25,18 +25,21 @@ export function Events(): React.ReactElement {
     if (!eventsSnapshot) return [];
     return eventsSnapshot.docs.map((doc) => {
       const data = doc.data();
-      return new EventModel(
-        doc.id,
-        data.title,
-        data.type,
-        data.date,
-        data.description,
-        data.location,
-        data.locationLink,
-        data.coverImageId,
-        data.coverImageUrl,
-        data.createdAt
-      );
+      // For now, just use the data directly without EventModel to avoid type issues
+      return {
+        id: doc.id,
+        title: data.title,
+        type: data.type, // This should be a string
+        date: data.date,
+        time: data.time, // Add time field
+        description: data.description,
+        location: data.location,
+        locationLink: data.locationLink,
+        coverImageId: data.coverImageId,
+        coverImageUrl: data.coverImageUrl,
+        createdAt: data.createdAt,
+        hasGallery: data.hasGallery || false,
+      };
     });
   }, [eventsSnapshot]);
 
