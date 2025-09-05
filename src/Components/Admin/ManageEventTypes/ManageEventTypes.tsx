@@ -296,6 +296,12 @@ export function ManageEventTypes(): React.ReactElement {
 
   return (
     <div className="ManageEventTypes">
+      {/* Admin page - no SEO needed, prevent indexing */}
+      <meta
+        name="robots"
+        content="noindex, nofollow"
+      />
+
       <div className="approve-header">
         <h2>ניהול סוגי אירועים</h2>
         <button

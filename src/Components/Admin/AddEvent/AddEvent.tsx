@@ -191,6 +191,12 @@ export function AddEvent({
         !isModal ? "standalone" : ""
       }`}
     >
+      {/* Admin page - no SEO needed, prevent indexing */}
+      <meta
+        name="robots"
+        content="noindex, nofollow"
+      />
+
       {!isModal && <h1>הוספת אירוע זיכרון</h1>}
       <form onSubmit={handleSubmit(send)}>
         <div className="form-group">

@@ -5,5 +5,5 @@ Allow: /
 # Sitemap location
 Sitemap: https://remembergalbasson.com/sitemap.xml
 
-# Disallow admin area
-Disallow: /admin 
+# Allow all search engines to crawl the site
+# This is important for memorial sites to be discoverable 

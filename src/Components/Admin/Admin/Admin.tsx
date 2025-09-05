@@ -30,6 +30,12 @@ function Admin(): React.ReactElement {
 
   return (
     <div className="Admin">
+      {/* Admin page - no SEO needed, prevent indexing */}
+      <meta
+        name="robots"
+        content="noindex, nofollow"
+      />
+
       <div className="admin-header">
         <h2 className="admin-title">
           פאנל ניהול

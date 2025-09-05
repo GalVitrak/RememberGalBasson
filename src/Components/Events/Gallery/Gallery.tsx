@@ -24,6 +24,7 @@ import { EventCard } from "../EventCard/EventCard";
 import { authStore } from "../../../Context/AuthState";
 import eventService from "../../../Services/EventService";
 import { Modal } from "antd";
+import SEO from "../../SEO/SEO";
 
 export function Gallery(): React.ReactElement {
   const { eventId } = useParams();
@@ -247,6 +248,37 @@ export function Gallery(): React.ReactElement {
 
   return (
     <div className="Gallery">
+      <SEO
+        title={`גלריית תמונות - ${event.title} | סמ״ר גל בסון ז״ל`}
+        description={`גלריית תמונות מאירוע: ${event.title}. צפה בתמונות לזכרו של סמ״ר גל בסון ז״ל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית.`}
+        keywords={[
+          // Gallery-specific Keywords
+          "גלריית תמונות גל בסון",
+          "תמונות יחידת יהל״ם",
+          "תמונות יחידת יהלום",
+          "גלריה זיכרון",
+          "תמונות אירועי זיכרון",
+          "תמונות הנצחה גל בסון",
+          "גלריה גל בסון",
+          "תמונות זיכרון יחידת יהלום",
+
+          // Memorial Keywords
+          "תמונות זיכרון",
+          "גלריה זיכרון גל בסון",
+          "תמונות אירועים גל בסון",
+          "תמונות יחידת יהלום זיכרון",
+
+          // English Variations
+          "Gallery Gal Bason",
+          "Memorial Photos",
+          "Gal Bason photos",
+          "Yahalom unit gallery",
+          "Memorial image gallery",
+        ]}
+        url={`https://remembergalbasson.com/gallery?event=${finalEventId}`}
+        canonicalUrl={`https://remembergalbasson.com/gallery?event=${finalEventId}`}
+      />
+
       {/* Event Card at the top */}
       <div className="gallery-event-card">
         <EventCard
