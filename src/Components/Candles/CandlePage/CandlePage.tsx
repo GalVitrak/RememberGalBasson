@@ -45,7 +45,7 @@ export function CandlePage(): React.ReactElement {
   return (
     <div className="CandlePage">
       <SEO
-        title="הדלק נר זיכרון לסמ״ר גל בסון ז״ל | נרות וירטואליים | יחידת יהל״ם"
+        title="הדלק נר זיכרון לזכר סמ״ר גל בסון ז״ל | נרות וירטואליים"
         description="הדלק נר זיכרון וירטואלי לזכרו של סמ״ר גל בסון ז״ל. שתף מחשבות, זיכרונות ותפילות לזכר הלוחם ביחידת יהל״ם של חיל ההנדסה הקרבית."
         keywords={[
           // Candle-specific Keywords

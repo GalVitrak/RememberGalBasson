@@ -1,7 +1,7 @@
 /* Events Component Styles */
 .Events {
   padding: 20px;
-  max-width: 1800px;
+  max-width: 1500px;
   width: 75%;
   margin: 0 auto;
   direction: rtl;
@@ -62,10 +62,17 @@
 /* Events Container */
 .events-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(300px, 1fr)
+  );
   gap: 20px;
   margin-top: 30px;
   align-items: stretch; /* Makes all cards stretch to same height */
+  justify-content: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Events Separator */
@@ -110,8 +117,12 @@
 /* Responsive Design */
 @media (max-width: 1800px) {
   .events-container {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(280px, 1fr)
+    );
     gap: 18px;
+    max-width: 800px;
   }
 }
 
@@ -127,6 +138,7 @@
   .events-container {
     grid-template-columns: 1fr;
     gap: 15px;
+    max-width: 500px;
   }
 
   .events-separator {
@@ -146,6 +158,7 @@
 
   .events-container {
     gap: 12px;
+    max-width: 400px;
   }
 
   .events-separator {

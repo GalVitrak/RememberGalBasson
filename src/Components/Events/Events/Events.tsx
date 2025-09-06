@@ -82,7 +82,7 @@ export function Events(): React.ReactElement {
   return (
     <div className="Events">
       <SEO
-        title="אירועי זיכרון לסמ״ר גל בסון ז״ל | לוח אירועים | יחידת יהל״ם"
+        title="אירועי זיכרון לסמ״ר גל בסון ז״ל | לוח אירועים "
         description="לוח אירועי זיכרון לסמ״ר גל בסון ז״ל. אירועים עתידיים ואירועים שהתקיימו לזכרו של גל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית."
         keywords={[
           // Event-specific Keywords
