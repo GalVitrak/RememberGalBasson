@@ -42,12 +42,6 @@ export function ForbiddenWords(): React.ReactElement {
 
   return (
     <div className="ForbiddenWords">
-      {/* Admin page - no SEO needed, prevent indexing */}
-      <meta
-        name="robots"
-        content="noindex, nofollow"
-      />
-
       <div className="approve-header">
         <h2>מילים אסורות</h2>
         <Link to="/admin" className="back-button">

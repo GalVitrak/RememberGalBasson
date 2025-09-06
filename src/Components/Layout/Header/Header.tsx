@@ -64,6 +64,16 @@ function Header(): React.ReactElement {
           דף הבית
         </Link>
         <Link
+          to="/about"
+          className={`nav-button ${
+            location.pathname === "/about"
+              ? "active"
+              : ""
+          }`}
+        >
+          אודות
+        </Link>
+        <Link
           to="/events"
           className={`nav-button ${
             location.pathname === "/events"
