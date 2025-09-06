@@ -2,36 +2,177 @@ import SEO from "../../SEO/SEO";
 import "./About.css";
 
 function About(): React.ReactElement {
-  // Define SEO keywords
+  // Comprehensive SEO keywords for maximum exposure
   const keywords = [
+    // Primary Hebrew Keywords - גל בסון
     "גל בסון",
+    "גל בסון ז״ל",
+    "סמ״ר גל בסון",
+    "גל בסון חולון",
+    "גל בסון זיכרון",
+    "גל בסון אתר הנצחה",
+
+    // Military Unit Keywords - יחידת יהל״ם
+    "יחידת יהל״ם",
+    "יחידת יהלום",
+    "יחידת יהל״ם צה״ל",
+    "יחידת יהל״ם הנדסה קרבית",
+    "חיל הנדסה קרבית",
+    "הנדסה קרבית",
+    "חיל ההנדסה",
+    "נופלי יחידת יהלום",
+    "חללי יחידת יהלום",
+    "יחידת יהלום חללים",
+    "יחידת יהלום נופלים",
+    "יחידת יהלום זיכרון",
+    "יחידת יהלום הנצחה",
+
+    // Operation Keywords - מבצע צוק איתן
+    "מבצע צוק איתן",
+    "צוק איתן",
+    "חללי צוק איתן",
+    "נופלי צוק איתן",
+    "מבצע צוק איתן 2014",
+    "צוק איתן חללים",
+    "צוק איתן נופלים",
+    "צוק איתן זיכרון",
+
+    // Memorial Keywords - אתר הנצחה
+    "אתר הנצחה",
+    "זיכרון לחללי צה״ל",
+    "נופלי צה״ל",
+    "חללי צה״ל",
+    "הנצחת חללי צה״ל",
+    "אתר זיכרון",
+    "הנצחה אישית",
+    "זיכרון לחייל",
+    "זיכרון לחלל",
+    "הנצחת נופלים",
+
+    // Location Keywords - חולון
+    "חולון",
+    "חללי חולון",
+    "נופלי חולון",
+    "גל בסון חולון",
+    "בית עלמין צבאי חולון",
+    "חולון צה״ל",
+    "חללי מרכז",
+    "נופלי מרכז",
+    "גוש דן חללים",
+    "גוש דן נופלים",
+
+    // Team Keywords - צוות מוגלי
+    "צוות מוגלי",
+    "מוגלי",
+    "יחידת מוגלי",
+    "מוגלי יהלום",
+    "מוגלי הנדסה",
+
+    // Family & Personal Keywords
+    "משפחת בסון",
+    "הורים של גל בסון",
+    "אח של גל בסון",
+    "אחות של גל בסון",
+    "חברים של גל בסון",
+    "גל בסון משפחה",
+
+    // School & Education Keywords
+    "בית ספר בן צבי חולון",
+    "חטיבת זלמן ארן",
+    "תיכון עירוני קריית שרת",
+    "כדורסל חולון",
+    "תלמיד חולון",
+    "גל בסון בית ספר",
+    "גל בסון חינוך",
+
+    // Military Service Keywords
+    "גיוס 2012",
+    "הכשרה יהל״ם",
+    "לוחם הנדסה",
+    "צוות מוגלי",
+    "פעילות מבצעית",
+    "גל בסון צה״ל",
+    "גל בסון שירות",
+
+    // Date & Anniversary Keywords
+    "25.7.2014",
+    "כ״ח בתמוז תשע״ד",
+    "חללי יולי 2014",
+    "נופלי 2014",
+    "יום השנה לגל בסון",
+    "גל בסון תאריך",
+    "גל בסון יום השנה",
+
+    // Memorial & Commemoration Keywords
+    "הנצחה אישית",
+    "נר זיכרון וירטואלי",
+    "גלריה זיכרון",
+    "אירועי זיכרון",
+    "זיכרון לחייל",
+    "הדלק נר זיכרון",
+    "נר זיכרון גל בסון",
+    "זיכרון וירטואלי",
+
+    // English Variations for International Exposure
     "Gal Bason",
     "Gal Basson",
-    "חללי צוק איתן",
-    'חללי צה"ל',
-    "חללי הנדסה קרבית",
-    "חללי חיל הנדסה קרבית",
-    "חללי יהלום",
-    "חללי יחידת יהלום",
-    'חללי יהל"ם',
-    'חללי יחידת יהל"ם',
-    "צוות מוגלי",
-    "נופלי צוק איתן",
-    'נופלי צה"ל',
-    "נופלי הנדסה קרבית",
-    "נופלי חיל הנדסה קרבית",
-    "נופלי יהלום",
-    "נופלי יחידת יהלום",
-    'נופלי יהל"ם',
-    'נופלי יחידת יהל"ם',
+    "Yahalom Unit",
+    "Combat Engineering Corps",
+    "Operation Protective Edge",
+    "Israel Defense Forces",
+    "Holon",
+    "Memorial Site",
+    "Fallen Soldier",
+    "Israeli soldier memorial",
+    "Holon fallen soldier",
+    "Yahalom unit memorial",
+    "Gaza operation fallen",
+    "Israeli engineering corps",
+    "Gal Bason memorial",
+    "Gal Bason tribute",
   ];
+
+  // Structured Data for Rich Snippets
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "סמ״ר גל בסון",
+    alternateName: ["Gal Bason", "Gal Basson"],
+    birthDate: "1993-12-22",
+    deathDate: "2014-07-25",
+    description:
+      "לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית, נפל במהלך מבצע צוק איתן",
+    nationality: "Israeli",
+    birthPlace: {
+      "@type": "Place",
+      name: "חולון, ישראל",
+    },
+    alumniOf: {
+      "@type": "Organization",
+      name: "יחידת יהל״ם, חיל ההנדסה הקרבית",
+    },
+    hasOccupation: {
+      "@type": "Occupation",
+      name: "לוחם הנדסה קרבית",
+    },
+    url: "https://remembergalbasson.com",
+    image:
+      "https://remembergalbasson.com/src/assets/gal.jpg",
+    sameAs: [
+      "https://remembergalbasson.com/about",
+    ],
+  };
 
   return (
     <div className="About">
       <SEO
-        title="לזכרו של סמ״ר גל בסון ז״ל | לוחם ביחידת יהל״ם שנפל במבצע צוק איתן"
-        description="אתר הנצחה לזכרו של סמ״ר גל בסון ז״ל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית, אשר נפל במהלך מבצע צוק איתן."
+        title="סמ״ר גל בסון ז״ל | לוחם יחידת יהל״ם שנפל במבצע צוק איתן | אתר הנצחה"
+        description="אתר הנצחה לזכרו של סמ״ר גל בסון ז״ל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית, אשר נפל במהלך מבצע צוק איתן. גל היה בן חולון, לוחם מסור וחבר אמיתי."
         keywords={keywords}
+        structuredData={structuredData}
+        image="/src/assets/gal.jpg"
+        url="https://remembergalbasson.com/about"
+        canonicalUrl="https://remembergalbasson.com/about"
       />
 
       <section className="hero-section">

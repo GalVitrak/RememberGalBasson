@@ -91,6 +91,12 @@ export function AddForbiddenWords(): React.ReactElement {
 
   return (
     <div className="AddForbiddenWords">
+      {/* Admin page - no SEO needed, prevent indexing */}
+      <meta
+        name="robots"
+        content="noindex, nofollow"
+      />
+
       <div className="approve-header">
         <h2>הוספת מילים אסורות</h2>
       </div>

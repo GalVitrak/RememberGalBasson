@@ -5,6 +5,7 @@ import CandleModel from "../../../Models/CandleModel";
 import candleService from "../../../Services/CandleService";
 import { useState } from "react";
 import { CandleImage } from "../CandleImage/CandleImage";
+import SEO from "../../SEO/SEO";
 
 interface AddCandleProps {
   onClose: (show: boolean) => void;
@@ -57,6 +58,37 @@ export function AddCandle({
 
   return (
     <div className="AddCandle">
+      <SEO
+        title="הדלק נר זיכרון לסמ״ר גל בסון ז״ל | הוסף נר וירטואלי"
+        description="הוסף נר זיכרון וירטואלי לזכרו של סמ״ר גל בסון ז״ל. שתף מחשבות, זיכרונות ותפילות לזכר הלוחם ביחידת יהל״ם."
+        keywords={[
+          // Add Candle Keywords
+          "הוסף נר זיכרון",
+          "נר וירטואלי גל בסון",
+          "הדלק נר זיכרון",
+          "זיכרון לחללי צה״ל",
+          "הוסף נר זיכרון גל בסון",
+          "נר זיכרון יחידת יהלום",
+          "נר זיכרון יחידת יהל״ם",
+
+          // Memorial Keywords
+          "הוספת נר זיכרון",
+          "נר זיכרון וירטואלי",
+          "הנצחה וירטואלית",
+          "זיכרון לחלל גל בסון",
+          "נר זיכרון חולון",
+
+          // English Variations
+          "Add Virtual Candle",
+          "Memorial Candle",
+          "Add candle Gal Bason",
+          "Virtual candle memorial",
+          "Add memorial candle",
+        ]}
+        url="https://remembergalbasson.com/add-candle"
+        canonicalUrl="https://remembergalbasson.com/add-candle"
+      />
+
       <div className="addCandle-form">
         <button
           className="close-button"

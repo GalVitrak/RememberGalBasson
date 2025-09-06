@@ -530,6 +530,12 @@ export function EventManagement(): React.ReactElement {
 
   return (
     <div className="EventManagment">
+      {/* Admin page - no SEO needed, prevent indexing */}
+      <meta
+        name="robots"
+        content="noindex, nofollow"
+      />
+
       <div className="approve-header">
         <h2>ניהול אירועים</h2>
         <Link to="/admin" className="back-button">
