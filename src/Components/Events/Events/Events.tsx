@@ -7,7 +7,6 @@ import "./Events.css";
 import { useMemo } from "react";
 import { db } from "../../../../firebase-config";
 import { useCollection } from "react-firebase-hooks/firestore";
-import SEO from "../../SEO/SEO";
 
 import { EventCard } from "../EventCard/EventCard";
 
@@ -81,36 +80,6 @@ export function Events(): React.ReactElement {
 
   return (
     <div className="Events">
-      <SEO
-        title="אירועי זיכרון לסמ״ר גל בסון ז״ל | לוח אירועים | יחידת יהל״ם"
-        description="לוח אירועי זיכרון לסמ״ר גל בסון ז״ל. אירועים עתידיים ואירועים שהתקיימו לזכרו של גל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית."
-        keywords={[
-          // Event-specific Keywords
-          "אירועי זיכרון גל בסון",
-          "לוח אירועים גל בסון",
-          "אירועים יחידת יהל״ם",
-          "אירועים יחידת יהלום",
-          "אירועי זיכרון צה״ל",
-          "אירועי הנצחה גל בסון",
-          "לוח אירועי זיכרון",
-          "אירועי זיכרון חולון",
-
-          // Memorial Keywords
-          "הנצחה גל בסון",
-          "זיכרון גל בסון",
-          "אירועי זיכרון יחידת יהלום",
-          "אירועי זיכרון יחידת יהל״ם",
-
-          // English Variations
-          "Events Gal Bason",
-          "Memorial Events",
-          "Gal Bason events",
-          "Yahalom unit events",
-        ]}
-        url="https://remembergalbasson.com/events"
-        canonicalUrl="https://remembergalbasson.com/events"
-      />
-
       {loading && (
         <div className="loading">
           טוען אירועים...

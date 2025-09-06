@@ -23,6 +23,7 @@ function Login(): React.ReactElement {
     setError(null);
 
     try {
+
       await adminService.login(credentials);
 
       // Check if login was successful
@@ -48,12 +49,6 @@ function Login(): React.ReactElement {
 
   return (
     <div className="Login">
-      {/* Admin page - no SEO needed, prevent indexing */}
-      <meta
-        name="robots"
-        content="noindex, nofollow"
-      />
-
       <div className="login-container">
         <h2>כניסת מנהל</h2>
 
