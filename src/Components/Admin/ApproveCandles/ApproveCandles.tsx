@@ -5,16 +5,12 @@ import {
   collection,
   query,
   where,
-  doc,
-  updateDoc,
-  deleteDoc,
-  Timestamp,
-  getDoc,
 } from "firebase/firestore";
 import "./ApproveCandles.css";
 import { useMemo } from "react";
 import CandleModel from "../../../Models/CandleModel";
 import { db } from "../../../../firebase-config";
+import candleService from "../../../Services/CandleService";
 
 export function ApproveCandles(): React.ReactElement {
   const [candles, setCandles] = useState<
@@ -33,30 +29,19 @@ export function ApproveCandles(): React.ReactElement {
     );
   }, []);
 
-  const approveCandle = async (id: string) => {
+  const handleApprove = async (id: string) => {
     try {
       setIsProcessing((prev) => ({
         ...prev,
         [id]: true,
       }));
 
-      // Get the document reference
-      const candleRef = doc(db, "candles", id);
+      await candleService.approveCandle(
+        id,
+        "approve"
+      );
 
-      // Check if document exists
-      const candleDoc = await getDoc(candleRef);
-      if (!candleDoc.exists()) {
-        console.error("Candle not found");
-        return;
-      }
-
-      // Update the status to Approved
-      await updateDoc(candleRef, {
-        status: "Approved",
-        approvedAt: Timestamp.now(),
-      });
-
-      // Update local state
+      // Update local state - remove from list
       setCandles((prev) =>
         prev.filter((candle) => candle.id !== id)
       );
@@ -65,6 +50,7 @@ export function ApproveCandles(): React.ReactElement {
         "Error approving candle:",
         error
       );
+      alert("שגיאה באישור הנר");
     } finally {
       setIsProcessing((prev) => ({
         ...prev,
@@ -73,28 +59,28 @@ export function ApproveCandles(): React.ReactElement {
     }
   };
 
-  const deleteCandle = async (id: string) => {
+  const handleReject = async (id: string) => {
     try {
       setIsProcessing((prev) => ({
         ...prev,
         [id]: true,
       }));
 
-      // Get the document reference
-      const candleRef = doc(db, "candles", id);
+      await candleService.approveCandle(
+        id,
+        "reject"
+      );
 
-      // Delete the document
-      await deleteDoc(candleRef);
-
-      // Update local state
+      // Update local state - remove from list
       setCandles((prev) =>
         prev.filter((candle) => candle.id !== id)
       );
     } catch (error) {
       console.error(
-        "Error deleting candle:",
+        "Error rejecting candle:",
         error
       );
+      alert("שגיאה בדחיית הנר");
     } finally {
       setIsProcessing((prev) => ({
         ...prev,
@@ -138,8 +124,6 @@ export function ApproveCandles(): React.ReactElement {
         year: "numeric",
         month: "long",
         day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
       });
     } catch (e) {
       return dateString;
@@ -207,29 +191,27 @@ export function ApproveCandles(): React.ReactElement {
                   <button
                     className="approve-btn"
                     onClick={() =>
-                      approveCandle(candle.id)
+                      handleApprove(candle.id)
                     }
                     disabled={
                       isProcessing[candle.id]
                     }
+                    title="אישור הנר"
                   >
-                    <span className="btn-icon">
-                      ✓
-                    </span>
+                    ✓
                   </button>
 
                   <button
-                    className="delete-btn"
+                    className="reject-btn"
                     onClick={() =>
-                      deleteCandle(candle.id)
+                      handleReject(candle.id)
                     }
                     disabled={
                       isProcessing[candle.id]
                     }
+                    title="דחייה ומחיקה"
                   >
-                    <span className="btn-icon">
-                      ✕
-                    </span>
+                    🗑️
                   </button>
                 </div>
               </div>

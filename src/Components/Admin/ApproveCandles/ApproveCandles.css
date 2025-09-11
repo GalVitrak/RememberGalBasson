@@ -88,12 +88,16 @@
 
 .candle-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-top: auto;
+  gap: 10px;
 }
 
 .approve-btn,
-.delete-btn {
+.reject-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
   padding: 10px 18px;
   border-radius: 8px;
@@ -125,27 +129,26 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.delete-btn {
+.reject-btn {
   background: linear-gradient(
     135deg,
-    #8b4513 0%,
-    #a0522d 100%
+    #dc3545 0%,
+    #c82333 100%
   );
   color: white;
 }
 
-.delete-btn:hover {
+.reject-btn:hover {
   background: linear-gradient(
     135deg,
-    #a0522d 0%,
-    #b8651f 100%
+    #c82333 0%,
+    #bd2130 100%
   );
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-icon {
-  margin-left: 5px;
   font-size: 1.2rem;
 }
 

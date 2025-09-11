@@ -103,7 +103,7 @@ const uploadGalleryPhotos =
 
         if (galleryQuery.empty) {
           // Create new gallery document
-          const docRef = await db
+          await db
             .collection("galleries")
             .add(galleryData);
 

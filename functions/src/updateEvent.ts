@@ -6,8 +6,6 @@ import { db } from "./index";
 const updateEvent = functions.https.onCall(
   async (data, context) => {
     try {
-
-
       const {
         id,
         title,
@@ -128,8 +126,8 @@ const updateEvent = functions.https.onCall(
           if (oldImageId) {
             try {
               const oldImagePath = `events/${id}/${oldImageId}`;
-              const oldFile =
-                bucket.file(oldImagePath);
+              // const oldFile =
+              bucket.file(oldImagePath);
 
               // Try to delete with common extensions
               const extensions = [
@@ -148,7 +146,7 @@ const updateEvent = functions.https.onCall(
                     await oldFileWithExt.exists();
                   if (exists) {
                     await oldFileWithExt.delete();
-       
+
                     break;
                   }
                 } catch (extError) {
@@ -178,8 +176,6 @@ const updateEvent = functions.https.onCall(
       // Handle deletion of current image to use default
       if (deleteCurrentImage) {
         try {
-
-
           // Delete old image from storage if it exists
           if (oldImageId) {
             const bucket = admin
@@ -204,7 +200,7 @@ const updateEvent = functions.https.onCall(
                   await oldFileWithExt.exists();
                 if (exists) {
                   await oldFileWithExt.delete();
-            
+
                   break;
                 }
               } catch (extError) {
@@ -222,15 +218,11 @@ const updateEvent = functions.https.onCall(
               defaultImageData.defaultImageId;
             updateData.coverImageUrl =
               defaultImageData.defaultImageUrl;
-    
           } else {
             // Clear the image fields if no default image
             updateData.coverImageId = null;
             updateData.coverImageUrl = null;
-      
           }
-
-     
         } catch (deleteError) {
           console.warn(
             "Error deleting current image:",
@@ -241,7 +233,6 @@ const updateEvent = functions.https.onCall(
       }
 
       await eventRef.update(updateData);
-
 
       return {
         success: true,

@@ -40,7 +40,7 @@ class AdminService {
       }
 
       // Extract the token
-      const token = response.data as string;
+      const token = response.data.token;
 
       if (!token) {
         throw new Error(
@@ -65,6 +65,56 @@ class AdminService {
         type: AuthActionType.Logout,
       });
     } catch (error) {
+      throw error;
+    }
+  }
+
+  public async approveCandle(
+    candleId: string,
+    action: "approve" | "reject",
+    deleteCandle: boolean = false
+  ): Promise<any> {
+    try {
+      const approveCandle = httpsCallable(
+        functions,
+        "approveCandle"
+      );
+
+      const result = await approveCandle({
+        candleId,
+        action,
+        deleteCandle,
+      });
+
+      return result.data;
+    } catch (error) {
+      console.error(
+        "Error approving candle:",
+        error
+      );
+      throw error;
+    }
+  }
+
+  public async deleteForbiddenWord(
+    wordId: string
+  ): Promise<any> {
+    try {
+      const deleteForbiddenWord = httpsCallable(
+        functions,
+        "deleteForbiddenWord"
+      );
+
+      const result = await deleteForbiddenWord({
+        wordId,
+      });
+
+      return result.data;
+    } catch (error) {
+      console.error(
+        "Error deleting forbidden word:",
+        error
+      );
       throw error;
     }
   }

@@ -1,12 +1,20 @@
 import { useState } from "react";
 import "./AddForbiddenWords.css";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../../firebase-config";
 
 interface ForbiddenWord {
   id: string;
   word: string;
 }
 
-export function AddForbiddenWords(): React.ReactElement {
+interface AddForbiddenWordsProps {
+  onWordsAdded?: () => void;
+}
+
+export function AddForbiddenWords({
+  onWordsAdded,
+}: AddForbiddenWordsProps): React.ReactElement {
   const [words, setWords] = useState<
     ForbiddenWord[]
   >([{ id: "1", word: "" }]);
@@ -14,6 +22,10 @@ export function AddForbiddenWords(): React.ReactElement {
     useState(false);
   const [successMessage, setSuccessMessage] =
     useState("");
+  const [showDeleteModal, setShowDeleteModal] =
+    useState(false);
+  const [wordToDelete, setWordToDelete] =
+    useState<ForbiddenWord | null>(null);
 
   const addWordField = () => {
     const newWord: ForbiddenWord = {
@@ -25,10 +37,31 @@ export function AddForbiddenWords(): React.ReactElement {
 
   const removeWordField = (id: string) => {
     if (words.length > 1) {
+      const wordToRemove = words.find(
+        (word) => word.id === id
+      );
+      if (wordToRemove) {
+        setWordToDelete(wordToRemove);
+        setShowDeleteModal(true);
+      }
+    }
+  };
+
+  const confirmDelete = () => {
+    if (wordToDelete) {
       setWords(
-        words.filter((word) => word.id !== id)
+        words.filter(
+          (word) => word.id !== wordToDelete.id
+        )
       );
     }
+    setShowDeleteModal(false);
+    setWordToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setWordToDelete(null);
   };
 
   const updateWord = (
@@ -61,11 +94,23 @@ export function AddForbiddenWords(): React.ReactElement {
     setIsSubmitting(true);
 
     try {
-      // TODO: Implement API call to save forbidden words
+      // Call the backend function to add forbidden words
+      const addForbiddenWords = httpsCallable(
+        functions,
+        "addForbiddenWords"
+      );
 
-      // Simulate API call
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1000)
+      const wordsToAdd = validWords.map(
+        (word) => word.word
+      );
+
+      const result = await addForbiddenWords({
+        words: wordsToAdd,
+      });
+
+      console.log(
+        "Words added successfully:",
+        result.data
       );
 
       setSuccessMessage(
@@ -77,12 +122,21 @@ export function AddForbiddenWords(): React.ReactElement {
         { id: Date.now().toString(), word: "" },
       ]);
 
+      // Notify parent component to refresh the list
+      if (onWordsAdded) {
+        onWordsAdded();
+      }
+
       // Clear success message after 3 seconds
       setTimeout(
         () => setSuccessMessage(""),
         3000
       );
     } catch (error) {
+      console.error(
+        "Error adding forbidden words:",
+        error
+      );
       alert("שגיאה בשמירת המילים");
     } finally {
       setIsSubmitting(false);
@@ -141,9 +195,7 @@ export function AddForbiddenWords(): React.ReactElement {
                 disabled={words.length === 1}
                 title="מחק מילה"
               >
-                <span className="btn-icon">
-                  ✕
-                </span>
+                ✕
               </button>
             </div>
           ))}
@@ -176,6 +228,40 @@ export function AddForbiddenWords(): React.ReactElement {
             : "שמור מילים"}
         </button>
       </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="delete-modal-overlay">
+          <div className="delete-modal">
+            <div className="delete-modal-header">
+              <h3>מחיקת מילה</h3>
+            </div>
+            <div className="delete-modal-body">
+              <p>
+                האם אתה בטוח שברצונך למחוק את
+                המילה:
+              </p>
+              <div className="word-to-delete">
+                "{wordToDelete?.word}"
+              </div>
+            </div>
+            <div className="delete-modal-actions">
+              <button
+                className="cancel-btn"
+                onClick={cancelDelete}
+              >
+                ביטול
+              </button>
+              <button
+                className="confirm-delete-btn"
+                onClick={confirmDelete}
+              >
+                מחק
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -104,8 +104,8 @@ export function CandlePage(): React.ReactElement {
               </div>
             ) : approvedCandles.length === 0 ? (
               <div className="empty-state">
-                Be the first to light a candle and
-                share your memories
+                תהיה הראשון להדליק נר ולשתף
+                זיכרונות
               </div>
             ) : (
               approvedCandles.map((candle) => (

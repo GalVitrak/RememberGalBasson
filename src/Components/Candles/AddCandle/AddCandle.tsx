@@ -3,9 +3,14 @@ import "./AddCandle.css";
 import { useForm } from "react-hook-form";
 import CandleModel from "../../../Models/CandleModel";
 import candleService from "../../../Services/CandleService";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CandleImage } from "../CandleImage/CandleImage";
 import SEO from "../../SEO/SEO";
+import {
+  collection,
+  getDocs,
+} from "firebase/firestore";
+import { db } from "../../../../firebase-config";
 
 interface AddCandleProps {
   onClose: (show: boolean) => void;
@@ -24,7 +29,53 @@ export function AddCandle({
   const [isSubmitting, setIsSubmitting] =
     useState(false);
   const [textLength, setTextLength] = useState(0);
+  const [forbiddenWords, setForbiddenWords] =
+    useState<string[]>([]);
+  const [
+    forbiddenWordError,
+    setForbiddenWordError,
+  ] = useState<string>("");
   const MAX_TEXT_LENGTH = 256;
+
+  // Load forbidden words on component mount
+  useEffect(() => {
+    const loadForbiddenWords = async () => {
+      try {
+        const forbiddenWordsRef = collection(
+          db,
+          "ForbiddenWords"
+        );
+        const snapshot = await getDocs(
+          forbiddenWordsRef
+        );
+        const words = snapshot.docs.map((doc) =>
+          doc.data().word.toLowerCase()
+        );
+        setForbiddenWords(words);
+      } catch (error) {
+        console.error(
+          "Error loading forbidden words:",
+          error
+        );
+      }
+    };
+    loadForbiddenWords();
+  }, []);
+
+  // Check if text contains forbidden words
+  const checkForbiddenWords = (
+    text: string
+  ): string | null => {
+    const lowerText = text.toLowerCase();
+    for (const word of forbiddenWords) {
+      if (
+        lowerText.includes(word.toLowerCase())
+      ) {
+        return word;
+      }
+    }
+    return null;
+  };
 
   const handleTextChange = (
     e: React.ChangeEvent<HTMLTextAreaElement>
@@ -35,10 +86,73 @@ export function AddCandle({
     }
   };
 
+  const handleNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    // Allow only English, Hebrew, spaces, and common punctuation
+    const allowedPattern =
+      /^[a-zA-Z\u0590-\u05FF\s\-'\.]*$/;
+    if (allowedPattern.test(value)) {
+      e.target.value = value;
+    } else {
+      // Remove invalid characters
+      e.target.value = value.replace(
+        /[^a-zA-Z\u0590-\u05FF\s\-'\.]/g,
+        ""
+      );
+    }
+  };
+
+  const handleMessageChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const value = e.target.value;
+    // Allow only English, Hebrew, spaces, and common punctuation
+    const allowedPattern =
+      /^[a-zA-Z\u0590-\u05FF\s\-'\.\,\!\?]*$/;
+    if (allowedPattern.test(value)) {
+      e.target.value = value;
+    } else {
+      // Remove invalid characters
+      e.target.value = value.replace(
+        /[^a-zA-Z\u0590-\u05FF\s\-'\.\,\!\?]/g,
+        ""
+      );
+    }
+
+    // Clear forbidden word error when user is typing
+    setForbiddenWordError("");
+
+    handleTextChange(e);
+  };
+
   const sendCandle = async (
     candle: CandleModel
   ) => {
     if (isSubmitting) return; // Prevent double submission
+
+    // Check for forbidden words in both name and text
+    const forbiddenInName = checkForbiddenWords(
+      candle.writerName || ""
+    );
+    const forbiddenInText = checkForbiddenWords(
+      candle.text || ""
+    );
+
+    if (forbiddenInName) {
+      setForbiddenWordError(
+        `המילה "${forbiddenInName}" בשם הכותב אסורה לשימוש`
+      );
+      return;
+    }
+
+    if (forbiddenInText) {
+      setForbiddenWordError(
+        `המילה "${forbiddenInText}" אסורה לשימוש בהקדשה`
+      );
+      return;
+    }
 
     try {
       setIsSubmitting(true);
@@ -118,6 +232,12 @@ export function AddCandle({
                   required:
                     "שם הכותב הוא שדה חובה",
                 })}
+                onChange={(e) => {
+                  handleNameChange(e);
+                  register("writerName").onChange(
+                    e
+                  );
+                }}
                 placeholder=" "
                 aria-label="Writer name"
               />
@@ -135,8 +255,11 @@ export function AddCandle({
                 {...register("text", {
                   required: "טקסט הוא שדה חובה",
                   maxLength: MAX_TEXT_LENGTH,
-                  onChange: handleTextChange,
                 })}
+                onChange={(e) => {
+                  handleMessageChange(e);
+                  register("text").onChange(e);
+                }}
                 className={`input ${
                   errors.text ? "error" : ""
                 }`}
@@ -166,6 +289,13 @@ export function AddCandle({
                 </span>
               </div>
             </div>
+
+            {forbiddenWordError && (
+              <div className="forbidden-word-error">
+                {forbiddenWordError}
+              </div>
+            )}
+
             <button
               type="submit"
               className="submit-button"

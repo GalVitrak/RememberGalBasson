@@ -34,7 +34,6 @@ const addEvent = functions.https.onCall(
         try {
           // Check if using default image
           if (event.imageData.useDefaultImage) {
-           
             coverImageId =
               event.imageData.defaultImageId;
             coverImageUrl =
@@ -46,8 +45,6 @@ const addEvent = functions.https.onCall(
               mimeType,
               base64Data,
             } = event.imageData;
-
-     
 
             if (
               !fileName ||
@@ -71,14 +68,11 @@ const addEvent = functions.https.onCall(
               "base64"
             );
 
-
             // Get Firebase Storage bucket
             const bucket = admin
               .storage()
               .bucket();
             const file = bucket.file(imageId);
-
-      
 
             // Upload the file
             await file.save(imageBuffer, {
@@ -87,16 +81,12 @@ const addEvent = functions.https.onCall(
               },
             });
 
-   
-
             // Make the file publicly readable
             await file.makePublic();
 
             // Get the public URL
             coverImageUrl = `https://storage.googleapis.com/${bucket.name}/${imageId}`;
             coverImageId = uniqueId;
-
-       
           }
         } catch (imageError) {
           console.error(
@@ -127,11 +117,9 @@ const addEvent = functions.https.onCall(
         createdAt: new Date(),
       };
 
-
-      const docRef = await db
+      await db
         .collection("events")
         .add(eventToSave);
-
 
       return {
         success: true,

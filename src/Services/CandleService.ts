@@ -27,6 +27,32 @@ class CandleService {
     );
     await reportCandle({ candleId });
   }
+
+  public async approveCandle(
+    candleId: string,
+    action: "approve" | "reject"
+  ): Promise<any> {
+    const approveCandle = httpsCallable(
+      functions,
+      "approveCandle"
+    );
+
+    // Get the token from localStorage
+    const token = localStorage.getItem(
+      "RememberToken"
+    );
+    if (!token) {
+      throw new Error("User not authenticated");
+    }
+
+    const result = await approveCandle({
+      candleId,
+      action,
+      token,
+    });
+
+    return result.data;
+  }
 }
 
 const candleService = new CandleService();
