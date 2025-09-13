@@ -37,7 +37,9 @@ export function CandlePage(): React.ReactElement {
         data.writerName,
         data.text,
         data.createdAt,
-        data.status
+        data.status,
+        data.approvedAt,
+        data.reported
       );
     });
   }, [candlesSnapshot]);
@@ -108,12 +110,17 @@ export function CandlePage(): React.ReactElement {
                 זיכרונות
               </div>
             ) : (
-              approvedCandles.map((candle) => (
-                <CandleCard
-                  key={candle.id}
-                  candle={candle}
-                />
-              ))
+              approvedCandles.map(
+                (candle) => (
+                  console.log(candle.reported),
+                  (
+                    <CandleCard
+                      key={candle.id}
+                      candle={candle}
+                    />
+                  )
+                )
+              )
             )}
           </div>
         </div>

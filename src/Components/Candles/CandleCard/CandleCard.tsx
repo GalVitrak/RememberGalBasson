@@ -2,6 +2,7 @@ import CandleModel from "../../../Models/CandleModel";
 import "./CandleCard.css";
 import { CandleImage } from "../CandleImage/CandleImage";
 import candleService from "../../../Services/CandleService";
+import { notification } from "antd";
 
 interface CandleCardProps {
   candle: CandleModel;
@@ -44,8 +45,18 @@ export function CandleCard({
       <div className="candleImage">
         <CandleImage />
         <div className="report-button">
-          <button onClick={reportCandle}>
-            דווחו על נר
+          <button
+            onClick={reportCandle}
+            disabled={candle.reported}
+            title={
+              candle.reported
+                ? "נר זה כבר דווח"
+                : ""
+            }
+          >
+            {candle.reported
+              ? "נר זה כבר דווח"
+              : "דווחו על נר"}
           </button>
         </div>
       </div>

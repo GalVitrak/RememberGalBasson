@@ -12,6 +12,13 @@ const reportCandle = functions.https.onCall(
         .doc(candleId)
         .get();
 
+      if (candleDoc.data()?.reported) {
+        throw new functions.https.HttpsError(
+          "failed-precondition",
+          "Candle already reported"
+        );
+      }
+
       if (!candleDoc.exists) {
         throw new functions.https.HttpsError(
           "not-found",
@@ -27,6 +34,7 @@ const reportCandle = functions.https.onCall(
         .doc(candleId)
         .update({
           status: "Reported",
+          reported: true,
         });
 
       // Send Telegram notification for reported candle

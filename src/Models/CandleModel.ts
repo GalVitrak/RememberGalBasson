@@ -5,6 +5,7 @@ class CandleModel {
   createdAt: string;
   status: string;
   approvedAt?: string;
+  reported: boolean;
 
   constructor(
     id: string,
@@ -12,7 +13,8 @@ class CandleModel {
     text: string,
     createdAt: string,
     status: string,
-    approvedAt?: string
+    approvedAt?: string,
+    reported?: boolean
   ) {
     this.id = id;
     this.writerName = writerName;
@@ -20,6 +22,7 @@ class CandleModel {
     this.createdAt = createdAt;
     this.status = status;
     this.approvedAt = approvedAt;
+    this.reported = reported || false;
   }
 }
 

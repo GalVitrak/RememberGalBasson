@@ -349,3 +349,15 @@
 .report-button button:active {
   transform: translateY(1px);
 }
+
+.report-button button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #666;
+}
+
+.report-button button:disabled:hover {
+  background-color: #ccc;
+  transform: none;
+}
