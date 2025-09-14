@@ -31,6 +31,25 @@ export function AddEvent({
     useState<string | null>(null);
   const [selectedFile, setSelectedFile] =
     useState<File | null>(null);
+  const [showAlert, setShowAlert] =
+    useState(false);
+  const [alertMessage, setAlertMessage] =
+    useState("");
+  const [alertType, setAlertType] = useState<
+    "success" | "error"
+  >("success");
+
+  const showCustomAlert = (
+    message: string,
+    type: "success" | "error"
+  ) => {
+    setAlertMessage(message);
+    setAlertType(type);
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  };
 
   const convertFileToBase64 = (
     file: File
@@ -136,7 +155,10 @@ export function AddEvent({
       }
 
       // Show success message
-      alert("האירוע נוסף בהצלחה!");
+      showCustomAlert(
+        "האירוע נוסף בהצלחה!",
+        "success"
+      );
 
       // If in modal, close it by calling the callback
       if (isModal && onEventAdded) {
@@ -144,7 +166,10 @@ export function AddEvent({
       }
     } catch (error) {
       // You might want to show an error message to the user here
-      alert("שגיאה בהוספת האירוע. אנא נסה שוב.");
+      showCustomAlert(
+        "שגיאה בהוספת האירוע. אנא נסה שוב.",
+        "error"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -196,6 +221,30 @@ export function AddEvent({
         name="robots"
         content="noindex, nofollow"
       />
+
+      {/* Custom Alert */}
+      {showAlert && (
+        <div
+          className={`custom-alert ${alertType}`}
+        >
+          <div className="alert-content">
+            <span className="alert-icon">
+              {alertType === "success"
+                ? "✓"
+                : "✗"}
+            </span>
+            <span className="alert-message">
+              {alertMessage}
+            </span>
+            <button
+              className="alert-close"
+              onClick={() => setShowAlert(false)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       {!isModal && <h1>הוספת אירוע זיכרון</h1>}
       <form onSubmit={handleSubmit(send)}>

@@ -5,6 +5,7 @@ import {
 import "./Header.css";
 import galImage from "../../../assets/gal.jpg";
 import { useState } from "react";
+import { authStore } from "../../../Context/AuthState";
 
 function Header(): React.ReactElement {
   const [isMenuOpen, setIsMenuOpen] =
@@ -83,6 +84,20 @@ function Header(): React.ReactElement {
         >
           הדלק נר זיכרון 🕯️
         </Link>
+        {authStore.getState().loggedIn && (
+          <Link
+            to="/admin"
+            className={`nav-button ${
+              location.pathname.startsWith(
+                "/admin"
+              )
+                ? "active"
+                : ""
+            }`}
+          >
+            אדמין
+          </Link>
+        )}
       </div>
     </div>
   );

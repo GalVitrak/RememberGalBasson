@@ -11,7 +11,7 @@ class EventService {
         "addEvent"
       );
 
-      const response = await addEvent({
+      await addEvent({
         event: eventData,
       });
     } catch (error) {

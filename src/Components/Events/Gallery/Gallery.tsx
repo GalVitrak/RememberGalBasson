@@ -107,6 +107,7 @@ export function Gallery(): React.ReactElement {
       data.title,
       data.type,
       data.date,
+      data.time,
       data.description,
       data.location,
       data.locationLink,

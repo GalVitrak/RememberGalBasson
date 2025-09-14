@@ -4,14 +4,21 @@ import {
   query,
 } from "firebase/firestore";
 import "./Events.css";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { db } from "../../../../firebase-config";
 import { useCollection } from "react-firebase-hooks/firestore";
 import SEO from "../../SEO/SEO";
 
 import { EventCard } from "../EventCard/EventCard";
+import EventModel from "../../../Models/EventModel";
+import { AddSubscriber } from "../addSubscriber/addSubscriber";
+import Modal from "antd/es/modal/Modal";
 
 export function Events(): React.ReactElement {
+  const [
+    showAddSubscriber,
+    setShowAddSubscriber,
+  ] = useState(false);
   const eventsQuery = useMemo(() => {
     return query(
       collection(db, "events"),
@@ -26,21 +33,20 @@ export function Events(): React.ReactElement {
     if (!eventsSnapshot) return [];
     return eventsSnapshot.docs.map((doc) => {
       const data = doc.data();
-      // For now, just use the data directly without EventModel to avoid type issues
-      return {
-        id: doc.id,
-        title: data.title,
-        type: data.type, // This should be a string
-        date: data.date,
-        time: data.time, // Add time field
-        description: data.description,
-        location: data.location,
-        locationLink: data.locationLink,
-        coverImageId: data.coverImageId,
-        coverImageUrl: data.coverImageUrl,
-        createdAt: data.createdAt,
-        hasGallery: data.hasGallery || false,
-      };
+      return new EventModel(
+        doc.id,
+        data.title,
+        data.type,
+        data.date,
+        data.time,
+        data.description,
+        data.location,
+        data.locationLink,
+        data.coverImageId,
+        data.coverImageUrl,
+        data.createdAt,
+        data.hasGallery || false
+      );
     });
   }, [eventsSnapshot]);
 
@@ -88,28 +94,41 @@ export function Events(): React.ReactElement {
           // Event-specific Keywords
           "אירועי זיכרון גל בסון",
           "לוח אירועים גל בסון",
-          "אירועים יחידת יהל״ם",
-          "אירועים יחידת יהלום",
-          "אירועי זיכרון צה״ל",
           "אירועי הנצחה גל בסון",
           "לוח אירועי זיכרון",
-          "אירועי זיכרון חולון",
 
           // Memorial Keywords
           "הנצחה גל בסון",
           "זיכרון גל בסון",
-          "אירועי זיכרון יחידת יהלום",
-          "אירועי זיכרון יחידת יהל״ם",
 
           // English Variations
           "Events Gal Bason",
           "Memorial Events",
           "Gal Bason events",
-          "Yahalom unit events",
         ]}
         url="https://remembergalbasson.com/events"
         canonicalUrl="https://remembergalbasson.com/events"
       />
+
+      <div className="Event_Header">
+        <h1>אירועי זיכרון לסמ״ר גל בסון ז״ל</h1>
+        <p>
+          אירועים עתידיים ואירועים שהתקיימו לזכרו
+          של גל, לוחם ביחידת יהל״ם של חיל ההנדסה
+          הקרבית.
+        </p>
+        <p>
+          הירשם לרשימת תפוצה לקבלת עדכונים על
+          אירועי הנצחה
+        </p>
+        <button
+          onClick={() =>
+            setShowAddSubscriber(true)
+          }
+        >
+          הירשם
+        </button>
+      </div>
 
       {loading && (
         <div className="loading">
@@ -175,6 +194,21 @@ export function Events(): React.ReactElement {
             )}
         </>
       )}
+
+      <Modal
+        open={showAddSubscriber}
+        onCancel={() =>
+          setShowAddSubscriber(false)
+        }
+        footer={null}
+        centered={true}
+        width={600}
+        height={400}
+        style={{ direction: "rtl" }}
+        destroyOnHidden={true}
+      >
+        <AddSubscriber />
+      </Modal>
     </div>
   );
 }
