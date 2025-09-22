@@ -10,6 +10,7 @@ import "./Admin.css";
 import { ApproveCandles } from "../ApproveCandles/ApproveCandles";
 import { useEffect } from "react";
 import { refreshAuthState } from "../../../Context/AuthState";
+import { TestEmail } from "../TestEmail/TestEmail";
 
 function Admin(): React.ReactElement {
   const navigate = useNavigate();
@@ -78,6 +79,12 @@ function Admin(): React.ReactElement {
           >
             נהל מילים אסורות
           </Link>
+        </div>
+
+        <div className="admin-section">
+          <h3>בדיקת מערכת המיילים</h3>
+          <p>שליחת מייל בדיקה למערכת התפוצה</p>
+          <TestEmail />
         </div>
       </div>
     </div>

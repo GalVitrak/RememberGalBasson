@@ -33,18 +33,24 @@ export function Events(): React.ReactElement {
     if (!eventsSnapshot) return [];
     return eventsSnapshot.docs.map((doc) => {
       const data = doc.data();
+      // Handle date formats
+      const eventDate = data.date; // Already in DD/MM/YYYY format
+      const createdAtDate =
+        data.createdAt?.toDate?.() ||
+        new Date(data.createdAt);
+
       return new EventModel(
         doc.id,
         data.title,
         data.type,
-        data.date,
-        data.time,
-        data.description,
+        eventDate, // Pass the DD/MM/YYYY string directly
+        data.time || "",
+        data.description || "",
         data.location,
-        data.locationLink,
-        data.coverImageId,
-        data.coverImageUrl,
-        data.createdAt,
+        data.locationLink || "",
+        data.coverImageId || "",
+        data.coverImageUrl || "",
+        createdAtDate.toISOString(),
         data.hasGallery || false
       );
     });
@@ -55,28 +61,41 @@ export function Events(): React.ReactElement {
       const today = new Date();
       today.setHours(0, 0, 0, 0); // Set to beginning of today
 
+      const parseDateString = (
+        dateStr: string
+      ) => {
+        const [day, month, year] = dateStr
+          .split("/")
+          .map(Number);
+        return new Date(year, month - 1, day);
+      };
+
       const upcoming = events
         .filter((event) => {
-          const eventDate = new Date(event.date);
+          const eventDate = parseDateString(
+            event.date
+          );
           eventDate.setHours(0, 0, 0, 0);
           return eventDate >= today;
         })
         .sort(
           (a, b) =>
-            new Date(a.date).getTime() -
-            new Date(b.date).getTime()
+            parseDateString(a.date).getTime() -
+            parseDateString(b.date).getTime()
         );
 
       const past = events
         .filter((event) => {
-          const eventDate = new Date(event.date);
+          const eventDate = parseDateString(
+            event.date
+          );
           eventDate.setHours(0, 0, 0, 0);
           return eventDate < today;
         })
         .sort(
           (a, b) =>
-            new Date(b.date).getTime() -
-            new Date(a.date).getTime()
+            parseDateString(b.date).getTime() -
+            parseDateString(a.date).getTime()
         );
 
       return {

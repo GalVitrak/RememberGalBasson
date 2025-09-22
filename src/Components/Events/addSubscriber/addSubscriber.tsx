@@ -9,6 +9,9 @@ export function AddSubscriber(): React.ReactElement {
     useState(false);
   const [showSuccess, setShowSuccess] =
     useState(false);
+  const [error, setError] = useState<
+    string | null
+  >(null);
 
   const {
     register,
@@ -24,6 +27,7 @@ export function AddSubscriber(): React.ReactElement {
 
     try {
       setIsSubmitting(true);
+      setError(null); // Clear any previous errors
       await subscriberService.addSubscriber(
         subscriber
       );
@@ -33,11 +37,14 @@ export function AddSubscriber(): React.ReactElement {
         () => setShowSuccess(false),
         3000
       );
-    } catch (error) {
-      console.error(error);
-      alert(
-        "שגיאה בהרשמה לעדכונים. אנא נסה שוב."
-      );
+    } catch (err: any) {
+      console.error(err);
+      // The error message from the backend is already in Hebrew
+      // Extract the error message from the service error
+      const errorMessage =
+        err?.message?.replace("Error: ", "") ||
+        "שגיאה בהרשמה לעדכונים. אנא נסה שוב.";
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -113,6 +120,11 @@ export function AddSubscriber(): React.ReactElement {
           <div className="success-message">
             נרשמת בהצלחה! תקבל/י עדכונים על
             אירועים חדשים
+          </div>
+        )}
+        {error && (
+          <div className="error-message form-error">
+            {error}
           </div>
         )}
       </form>

@@ -1,15 +1,20 @@
 import * as functions from "firebase-functions/v1";
-import * as admin from "firebase-admin";
+import { getStorage } from "firebase-admin/storage";
+import { Timestamp } from "firebase-admin/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "./index";
 
 const addEvent = functions.https.onCall(
   async (data, context) => {
     const { event } = data;
+    console.log("Received event data:", event);
 
     // Validate required fields
     if (!event) {
-      throw new Error("Event data is missing");
+      throw new functions.https.HttpsError(
+        "invalid-argument",
+        "Event data is missing"
+      );
     }
 
     if (
@@ -20,7 +25,8 @@ const addEvent = functions.https.onCall(
       !event.description ||
       !event.location
     ) {
-      throw new Error(
+      throw new functions.https.HttpsError(
+        "invalid-argument",
         "Required event fields are missing"
       );
     }
@@ -51,7 +57,8 @@ const addEvent = functions.https.onCall(
               !mimeType ||
               !base64Data
             ) {
-              throw new Error(
+              throw new functions.https.HttpsError(
+                "invalid-argument",
                 "Missing image data fields"
               );
             }
@@ -69,9 +76,7 @@ const addEvent = functions.https.onCall(
             );
 
             // Get Firebase Storage bucket
-            const bucket = admin
-              .storage()
-              .bucket();
+            const bucket = getStorage().bucket();
             const file = bucket.file(imageId);
 
             // Upload the file
@@ -93,7 +98,8 @@ const addEvent = functions.https.onCall(
             "Error processing image:",
             imageError
           );
-          throw new Error(
+          throw new functions.https.HttpsError(
+            "internal",
             `Image upload failed: ${
               imageError instanceof Error
                 ? imageError.message
@@ -104,17 +110,103 @@ const addEvent = functions.https.onCall(
       }
 
       // Create the event object with image metadata
+      // Combine date and time into a Firestore timestamp
+      // Validate date format
+      if (
+        !/^\d{4}-\d{2}-\d{2}$/.test(event.date)
+      ) {
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Invalid date format. Expected YYYY-MM-DD"
+        );
+      }
+
+      // Validate time format
+      if (!/^\d{2}:\d{2}$/.test(event.time)) {
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Invalid time format. Expected HH:mm"
+        );
+      }
+
+      console.log(
+        "Creating date from:",
+        event.date,
+        event.time
+      );
+      const [year, month, day] = event.date
+        .split("-")
+        .map(Number);
+      const [hours, minutes] = event.time
+        .split(":")
+        .map(Number);
+
+      // Validate date components
+      if (
+        year < 2000 ||
+        year > 2100 ||
+        month < 1 ||
+        month > 12 ||
+        day < 1 ||
+        day > 31
+      ) {
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Invalid date values"
+        );
+      }
+
+      // Validate time components
+      if (
+        hours < 0 ||
+        hours > 23 ||
+        minutes < 0 ||
+        minutes > 59
+      ) {
+        throw new functions.https.HttpsError(
+          "invalid-argument",
+          "Invalid time values"
+        );
+      }
+
+      const eventDateTime = new Date(
+        year,
+        month - 1,
+        day,
+        hours,
+        minutes
+      );
+      console.log(
+        "Created eventDateTime:",
+        eventDateTime
+      );
+
+      // Validate the created date is valid
+      if (isNaN(eventDateTime.getTime())) {
+        throw new functions.https.HttpsError(
+          "internal",
+          "Failed to create valid date from input"
+        );
+      }
+
+      // Format date as DD/MM/YYYY
+      const formattedDate = `${day
+        .toString()
+        .padStart(2, "0")}/${month
+        .toString()
+        .padStart(2, "0")}/${year}`;
+
       const eventToSave = {
         title: event.title,
         type: event.type,
-        date: event.date,
-        time: event.time, // Add time field
+        date: formattedDate,
+        time: event.time,
         description: event.description,
         location: event.location,
         locationLink: event.locationLink || "",
         coverImageId,
         coverImageUrl,
-        createdAt: new Date(),
+        createdAt: Timestamp.fromDate(new Date()),
       };
 
       await db

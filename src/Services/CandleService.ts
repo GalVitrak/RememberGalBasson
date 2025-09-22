@@ -15,7 +15,13 @@ class CandleService {
       functions,
       "addCandle"
     );
-    await addCandle({ candle });
+    try {
+      const result = await addCandle({ candle });
+      return result.data;
+    } catch (error: any) {
+      // Throw the error message from the backend
+      throw new Error(error?.message || "Failed to add candle");
+    }
   }
 
   public async reportCandle(

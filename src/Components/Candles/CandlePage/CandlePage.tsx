@@ -110,17 +110,12 @@ export function CandlePage(): React.ReactElement {
                 זיכרונות
               </div>
             ) : (
-              approvedCandles.map(
-                (candle) => (
-                  console.log(candle.reported),
-                  (
-                    <CandleCard
-                      key={candle.id}
-                      candle={candle}
-                    />
-                  )
-                )
-              )
+              approvedCandles.map((candle) => (
+                <CandleCard
+                  key={candle.id}
+                  candle={candle}
+                />
+              ))
             )}
           </div>
         </div>

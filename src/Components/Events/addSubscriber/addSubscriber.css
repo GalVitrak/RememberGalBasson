@@ -107,6 +107,21 @@
   width: 100%;
 }
 
+.form-error {
+  background-color: var(
+    --error-background,
+    #fff5f5
+  );
+  color: var(--error-color);
+  padding: 12px 15px;
+  border-radius: 8px;
+  text-align: center;
+  animation: fadeIn 0.3s ease-out;
+  margin-top: 10px;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

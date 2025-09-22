@@ -1,0 +1,95 @@
+.test-email {
+  width: 100%;
+}
+
+.test-email form {
+  width: 100%;
+}
+
+.test-email .form-group {
+  margin-bottom: 15px;
+}
+
+.test-email input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d5d5d5;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.test-email input:focus {
+  outline: none;
+  border-color: #6c757d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.test-email button {
+  background: linear-gradient(
+    135deg,
+    #6c757d 0%,
+    #5a6268 100%
+  );
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-size: 0.95rem;
+}
+
+.test-email button:hover:not(:disabled) {
+  background: linear-gradient(
+    135deg,
+    #5a6268 0%,
+    #495057 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.test-email button:disabled {
+  background: #e0e0e0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.test-email .status-message {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.95rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.test-email .status-message.success {
+  background: rgba(40, 167, 69, 0.1);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.test-email .status-message.error {
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

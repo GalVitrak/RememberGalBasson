@@ -20,7 +20,7 @@ import {
   useDocument,
 } from "react-firebase-hooks/firestore";
 import EventModel from "../../../Models/EventModel";
-import { EventCard } from "../EventCard/EventCard";
+import { EventInfo } from "./EventInfo";
 import { authStore } from "../../../Context/AuthState";
 import eventService from "../../../Services/EventService";
 import { Modal } from "antd";
@@ -102,18 +102,26 @@ export function Gallery(): React.ReactElement {
     if (!eventSnapshot || !eventSnapshot.exists())
       return null;
     const data = eventSnapshot.data();
+    // Convert Firestore Timestamp to string
+    const eventDate =
+      data.date?.toDate?.() ||
+      new Date(data.date);
+    const createdAtDate =
+      data.createdAt?.toDate?.() ||
+      new Date(data.createdAt);
+
     return new EventModel(
       eventSnapshot.id,
       data.title,
       data.type,
-      data.date,
-      data.time,
-      data.description,
+      eventDate.toISOString(),
+      data.time || "",
+      data.description || "",
       data.location,
-      data.locationLink,
-      data.coverImageId,
-      data.coverImageUrl,
-      data.createdAt,
+      data.locationLink || "",
+      data.coverImageId || "",
+      data.coverImageUrl || "",
+      createdAtDate.toISOString(),
       data.hasGallery || false
     );
   }, [eventSnapshot]);
@@ -230,10 +238,17 @@ export function Gallery(): React.ReactElement {
   }
 
   if (eventError || galleryError) {
+    console.error("Gallery Error:", {
+      eventError,
+      galleryError,
+    });
     return (
       <div className="Gallery">
         <div className="error">
-          שגיאה בטעינת הגלריה
+          שגיאה בטעינת הגלריה:{" "}
+          {eventError?.message ||
+            galleryError?.message ||
+            "אנא נסה שוב מאוחר יותר"}
         </div>
       </div>
     );
@@ -280,13 +295,8 @@ export function Gallery(): React.ReactElement {
         canonicalUrl={`https://remembergalbasson.com/gallery?event=${finalEventId}`}
       />
 
-      {/* Event Card at the top */}
-      <div className="gallery-event-card">
-        <EventCard
-          event={event}
-          isPastEvent={true}
-        />
-      </div>
+      {/* Event Info at the top */}
+      <EventInfo event={event} />
 
       {/* Gallery Photos Section */}
       <div className="gallery-section">

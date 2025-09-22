@@ -11,40 +11,32 @@ export function EventCard({
   isPastEvent = false,
 }: EventCardProps): React.ReactElement {
   const formatDate = (dateInput: any) => {
-    let date: Date;
-
-    // Handle different date formats
+    // Handle Firestore Timestamp for createdAt
     if (
-      dateInput &&
-      typeof dateInput === "object" &&
-      dateInput.toDate
-    ) {
-      // Firestore Timestamp
-      date = dateInput.toDate();
-    } else if (
       dateInput &&
       typeof dateInput === "object" &&
       dateInput.seconds
     ) {
-      // Firestore Timestamp object with seconds
-      date = new Date(dateInput.seconds * 1000);
-    } else if (dateInput) {
-      // Regular date string or Date object
-      date = new Date(dateInput);
-    } else {
-      return "תאריך לא זמין";
+      const date = new Date(
+        dateInput.seconds * 1000
+      );
+      const day = date
+        .getDate()
+        .toString()
+        .padStart(2, "0");
+      const month = (date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     }
 
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      return "תאריך לא זמין";
+    // Handle string date (for event.date)
+    if (typeof dateInput === "string") {
+      return dateInput;
     }
 
-    return date.toLocaleDateString("he-IL", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return "תאריך לא זמין";
   };
 
   const handleGoogleMapsClick = () => {
@@ -221,17 +213,15 @@ END:VCALENDAR`;
             </span>
           </div>
 
-          {/* Only show time for upcoming events */}
-          {!isPastEvent && (
-            <div className="event-card__time">
-              <span className="event-card__label">
-                שעה:
-              </span>
-              <span className="event-card__value">
-                {event.time || "לא צוינה"}
-              </span>
-            </div>
-          )}
+          {/* Show time for all events */}
+          <div className="event-card__time">
+            <span className="event-card__label">
+              שעה:
+            </span>
+            <span className="event-card__value">
+              {event.time || "לא צוינה"}
+            </span>
+          </div>
 
           <div className="event-card__location">
             <span className="event-card__label">

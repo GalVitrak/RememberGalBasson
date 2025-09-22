@@ -31,12 +31,13 @@ export function ForbiddenWords(): React.ReactElement {
   const [refreshTrigger, setRefreshTrigger] =
     useState(0);
 
-  const ForbiddenWordsRef = collection(
+  // Create reference to the ForbiddenWords collection
+  const forbiddenWordsRef = collection(
     db,
     "ForbiddenWords"
   );
 
-  const wordsQuery = query(ForbiddenWordsRef);
+  const wordsQuery = query(forbiddenWordsRef);
 
   const [
     wordsSnapshot,

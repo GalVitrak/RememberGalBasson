@@ -5,12 +5,13 @@ import { db } from "./index";
 const deleteEvent = functions.https.onCall(
   async (data, context) => {
     try {
-
-
       const { eventId } = data;
 
       // Validate input
-      if (!eventId || typeof eventId !== "string") {
+      if (
+        !eventId ||
+        typeof eventId !== "string"
+      ) {
         throw new functions.https.HttpsError(
           "invalid-argument",
           "Event ID is required"
@@ -18,7 +19,9 @@ const deleteEvent = functions.https.onCall(
       }
 
       // Check if event exists
-      const eventRef = db.collection("events").doc(eventId);
+      const eventRef = db
+        .collection("events")
+        .doc(eventId);
       const eventDoc = await eventRef.get();
 
       if (!eventDoc.exists) {
@@ -30,73 +33,54 @@ const deleteEvent = functions.https.onCall(
 
       const eventData = eventDoc.data();
 
-      // Delete gallery and photos if they exist
-      if (eventData?.hasGallery) {
-        try {
+      // Delete all files for this event from storage
+      try {
+        const bucket = admin.storage().bucket();
+        console.log(
+          `Deleting all files for event: ${eventId}`
+        );
 
-          // Get gallery document
+        // Delete the entire gallery folder for this event
+        const [files] = await bucket.getFiles({
+          prefix: `galleries/${eventId}/`,
+        });
+
+        console.log(
+          `Found ${files.length} files to delete in galleries/${eventId}/`
+        );
+
+        if (files.length > 0) {
+          await Promise.all(
+            files.map((file) => file.delete())
+          );
+          console.log(
+            `Successfully deleted all files for event: ${eventId}`
+          );
+        }
+
+        // Delete gallery document if it exists
+        if (eventData?.hasGallery) {
           const galleryQuery = await db
             .collection("galleries")
             .where("eventId", "==", eventId)
             .get();
 
           if (!galleryQuery.empty) {
-            const galleryDoc = galleryQuery.docs[0];
-            const galleryData = galleryDoc.data();
-            const photos = galleryData.photos || [];
-
-            // Delete photos from Firebase Storage
-            if (photos.length > 0) {
-              const bucket = admin.storage().bucket();
-              
-              for (const photo of photos) {
-                try {
-                  // Extract file path from URL
-                  const url = photo.url;
-                  const urlParts = url.split('/');
-                  const fileName = urlParts[urlParts.length - 1];
-                  const filePath = `galleries/${eventId}/${fileName}`;
-                  
-                  
-                  const file = bucket.file(filePath);
-                  const [exists] = await file.exists();
-                  
-                  if (exists) {
-                    await file.delete();
-                  }
-                } catch (photoError) {
-                  console.warn("Error deleting photo from storage:", photoError);
-                  // Continue with other photos
-                }
-              }
-            }
-
-            // Delete gallery document
-            await galleryDoc.ref.delete();
+            await galleryQuery.docs[0].ref.delete();
+            console.log(
+              `Deleted gallery document for event: ${eventId}`
+            );
           }
-        } catch (galleryError) {
-          console.warn("Error deleting gallery:", galleryError);
-          // Don't fail the whole operation
         }
-      }
-
-      // Delete cover image from storage if it exists
-      if (eventData?.coverImageId) {
-        try {
-          const bucket = admin.storage().bucket();
-          const coverImagePath = `events/${eventId}/${eventData.coverImageId}`;
-          
-          
-          const file = bucket.file(coverImagePath);
-          const [exists] = await file.exists();
-          
-          if (exists) {
-            await file.delete();
-          }
-        } catch (coverError) {
-          console.warn("Error deleting cover image:", coverError);
-          // Don't fail the whole operation
-        }
+      } catch (error) {
+        console.error(
+          `Error deleting event files: ${eventId}`,
+          error
+        );
+        throw new functions.https.HttpsError(
+          "internal",
+          "Failed to delete event files from storage"
+        );
       }
 
       // Delete the event document
@@ -107,9 +91,15 @@ const deleteEvent = functions.https.onCall(
         message: "Event deleted successfully",
       };
     } catch (error) {
-      console.error("Error in deleteEvent function:", error);
+      console.error(
+        "Error in deleteEvent function:",
+        error
+      );
 
-      if (error instanceof functions.https.HttpsError) {
+      if (
+        error instanceof
+        functions.https.HttpsError
+      ) {
         throw error;
       }
 

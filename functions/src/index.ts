@@ -13,6 +13,12 @@ import updateEvent from "./updateEvent";
 import deleteEvent from "./deleteEvent";
 import approveCandle from "./approveCandle";
 import { telegramWebhook } from "./telegramBot";
+import addSubscriber from "./addSubscriber";
+import unsubscribeSubscriber from "./unsubscribeSubscriber";
+import {
+  onEventPublished,
+  testMailjet,
+} from "./sendEventEmail";
 
 admin.initializeApp();
 
@@ -32,3 +38,8 @@ exports.updateEvent = updateEvent;
 exports.deleteEvent = deleteEvent;
 exports.approveCandle = approveCandle;
 exports.telegramWebhook = telegramWebhook;
+exports.addSubscriber = addSubscriber;
+exports.testMailjet = testMailjet;
+exports.onEventPublished = onEventPublished;
+exports.unsubscribeSubscriber =
+  unsubscribeSubscriber;

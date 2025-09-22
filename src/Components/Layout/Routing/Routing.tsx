@@ -13,6 +13,7 @@ import { EventManagement } from "../../Admin/EventManagement/EventManagement";
 import { ManageEventTypes } from "../../Admin/ManageEventTypes/ManageEventTypes";
 import { Events } from "../../Events/Events/Events";
 import { Gallery } from "../../Events/Gallery/Gallery";
+import { Unsubscribe } from "../../Events/Unsubscribe/Unsubscribe";
 
 function Routing(): React.ReactElement {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -76,6 +77,10 @@ function Routing(): React.ReactElement {
         <Route
           path="/admin/forbidden-words"
           element={<ForbiddenWords />}
+        />
+        <Route
+          path="/unsubscribe"
+          element={<Unsubscribe />}
         />
         {/* 404 route - must be last */}
         <Route path="*" element={<NotFound />} />

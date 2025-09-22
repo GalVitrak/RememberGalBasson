@@ -123,16 +123,31 @@ export function AddEvent({
         };
       }
 
+      // Create a Date object with the combined date and time
+      const [year, month, day] = formData.date
+        .split("-")
+        .map(Number);
+      const [hours, minutes] = formData.time
+        .split(":")
+        .map(Number);
+      const eventDateTime = new Date(
+        year,
+        month - 1,
+        day,
+        hours,
+        minutes
+      );
+
       // Create the event object with all the data
       const eventData = {
         title: formData.title,
-        type: formData.type, // This is the eventType name from the select
-        date: formData.date,
-        time: formData.time, // Add time to the event data
+        type: formData.type,
+        date: formData.date, // Keep original YYYY-MM-DD format
+        time: formData.time, // Keep time separately
         description: combinedDescription,
         location: formData.location,
         locationLink: formData.locationLink || "",
-        imageData: finalImageData, // Send the image data (custom or default) to the backend
+        imageData: finalImageData,
       };
 
       // Call the Firebase function through AdminService
@@ -313,9 +328,36 @@ export function AddEvent({
               className={
                 errors.date ? "error" : ""
               }
+              min="2000-01-01"
+              max="2100-12-31"
               {...register("date", {
                 required:
                   "תאריך האירוע הוא שדה חובה",
+                pattern: {
+                  value:
+                    /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,
+                  message:
+                    "פורמט תאריך לא תקין (YYYY-MM-DD)",
+                },
+                validate: {
+                  validDate: (value) => {
+                    const date = new Date(value);
+                    return (
+                      !isNaN(date.getTime()) ||
+                      "תאריך לא תקין"
+                    );
+                  },
+                  range: (value) => {
+                    const year = parseInt(
+                      value.split("-")[0]
+                    );
+                    return (
+                      (year >= 2000 &&
+                        year <= 2100) ||
+                      "שנה חייבת להיות בין 2000 ל-2100"
+                    );
+                  },
+                },
               })}
             />
             {errors.date && (
@@ -339,6 +381,11 @@ export function AddEvent({
               {...register("time", {
                 required:
                   "שעת האירוע היא שדה חובה",
+                pattern: {
+                  value:
+                    /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/,
+                  message: "פורמט שעה לא תקין",
+                },
               })}
             />
             {errors.time && (

@@ -31,10 +31,6 @@ export function AddCandle({
   const [textLength, setTextLength] = useState(0);
   const [forbiddenWords, setForbiddenWords] =
     useState<string[]>([]);
-  const [
-    forbiddenWordError,
-    setForbiddenWordError,
-  ] = useState<string>("");
   const MAX_TEXT_LENGTH = 256;
 
   // Load forbidden words on component mount
@@ -66,11 +62,19 @@ export function AddCandle({
   const checkForbiddenWords = (
     text: string
   ): string | null => {
-    const lowerText = text.toLowerCase();
+    // Add spaces at start and end to help with word boundary matching
+    const lowerText = ` ${text.toLowerCase()} `;
     for (const word of forbiddenWords) {
-      if (
-        lowerText.includes(word.toLowerCase())
-      ) {
+      const lowerWord = word.toLowerCase();
+      // Create a regex pattern that matches the word with Hebrew-aware word boundaries
+      const pattern = new RegExp(
+        `(?:^|\\s)${lowerWord.replace(
+          /[.*+?^${}()|[\]\\]/g,
+          "\\$&"
+        )}(?:$|\\s)`,
+        "i"
+      );
+      if (pattern.test(lowerText)) {
         return word;
       }
     }
@@ -121,38 +125,17 @@ export function AddCandle({
       );
     }
 
-    // Clear forbidden word error when user is typing
-    setForbiddenWordError("");
-
     handleTextChange(e);
   };
 
   const sendCandle = async (
     candle: CandleModel
   ) => {
-    if (isSubmitting) return; // Prevent double submission
-
-    // Check for forbidden words in both name and text
-    const forbiddenInName = checkForbiddenWords(
-      candle.writerName || ""
-    );
-    const forbiddenInText = checkForbiddenWords(
-      candle.text || ""
-    );
-
-    if (forbiddenInName) {
-      setForbiddenWordError(
-        `המילה "${forbiddenInName}" בשם הכותב אסורה לשימוש`
-      );
-      return;
-    }
-
-    if (forbiddenInText) {
-      setForbiddenWordError(
-        `המילה "${forbiddenInText}" אסורה לשימוש בהקדשה`
-      );
-      return;
-    }
+    if (
+      isSubmitting ||
+      Object.keys(errors).length > 0
+    )
+      return; // Prevent submission if submitting or has validation errors
 
     try {
       setIsSubmitting(true);
@@ -161,11 +144,9 @@ export function AddCandle({
       setTimeout(() => {
         onClose(false);
       }, 2000);
-    } catch (error) {
-      console.error(
-        "Error sending candle:",
-        error
-      );
+    } catch (error: any) {
+      // Check if it's a forbidden word error from the backend
+      alert("שגיאה בשליחת הנר. אנא נסה שוב.");
       setIsSubmitting(false); // Reset on error
     }
   };
@@ -231,6 +212,18 @@ export function AddCandle({
                 {...register("writerName", {
                   required:
                     "שם הכותב הוא שדה חובה",
+                  validate: {
+                    noForbiddenWords: (value) => {
+                      const forbidden =
+                        checkForbiddenWords(
+                          value
+                        );
+                      const result =
+                        !forbidden ||
+                        `המילה "${forbidden}" בשם הכותב אסורה לשימוש`;
+                      return result;
+                    },
+                  },
                 })}
                 onChange={(e) => {
                   handleNameChange(e);
@@ -255,6 +248,18 @@ export function AddCandle({
                 {...register("text", {
                   required: "טקסט הוא שדה חובה",
                   maxLength: MAX_TEXT_LENGTH,
+                  validate: {
+                    noForbiddenWords: (value) => {
+                      const forbidden =
+                        checkForbiddenWords(
+                          value
+                        );
+                      const result =
+                        !forbidden ||
+                        `המילה "${forbidden}" אסורה לשימוש בהקדשה`;
+                      return result;
+                    },
+                  },
                 })}
                 onChange={(e) => {
                   handleMessageChange(e);
@@ -290,16 +295,26 @@ export function AddCandle({
               </div>
             </div>
 
-            {forbiddenWordError && (
+            {/* Show forbidden word error */}
+            {(errors.writerName?.type ===
+              "forbidden" ||
+              errors.text?.type ===
+                "forbidden") && (
               <div className="forbidden-word-error">
-                {forbiddenWordError}
+                {errors.writerName?.type ===
+                "forbidden"
+                  ? errors.writerName.message
+                  : errors.text?.message}
               </div>
             )}
 
             <button
               type="submit"
               className="submit-button"
-              disabled={isSubmitting}
+              disabled={
+                isSubmitting ||
+                Object.keys(errors).length > 0
+              }
             >
               {isSubmitting
                 ? "שולח..."
