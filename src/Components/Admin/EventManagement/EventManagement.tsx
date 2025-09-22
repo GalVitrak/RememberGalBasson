@@ -38,7 +38,6 @@ export function EventManagement(): React.ReactElement {
     useState<any[]>([]);
   const [isUploading, setIsUploading] =
     useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [notification, setNotification] =
     useState<{
       message: string;
@@ -95,26 +94,6 @@ export function EventManagement(): React.ReactElement {
     useState<any | null>(null);
   const [isDeleting, setIsDeleting] =
     useState(false);
-
-  // Detect mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth <= 768;
-      setIsMobile(mobile);
-    };
-
-    checkMobile();
-    window.addEventListener(
-      "resize",
-      checkMobile
-    );
-
-    return () =>
-      window.removeEventListener(
-        "resize",
-        checkMobile
-      );
-  }, []);
 
   // Custom notification helper
   const showNotification = (
@@ -193,7 +172,7 @@ export function EventManagement(): React.ReactElement {
 
     // Show notification that upload modal opened
     showNotification(
-      `העלאת תמונות לזיכרון "${eventTitle}"`,
+      `העלאת תמונות לאירוע הנצחה "${eventTitle}"`,
       "info"
     );
   };
@@ -602,7 +581,7 @@ export function EventManagement(): React.ReactElement {
                         event.title
                       )
                     }
-                    title="העלה תמונות לזיכרון"
+                    title="העלה תמונות לאירוע הנצחה"
                   >
                     📷
                   </button>
@@ -643,7 +622,7 @@ export function EventManagement(): React.ReactElement {
         width={900}
         style={{ direction: "rtl" }}
         destroyOnHidden={true}
-        title="הוספת אירוע זיכרון"
+        title="הוספת אירוע הנצחה"
       >
         <AddEvent
           isModal={true}

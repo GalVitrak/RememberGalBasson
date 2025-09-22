@@ -54,8 +54,7 @@ export function AddSubscriber(): React.ReactElement {
     <div className="addSubscriber">
       <h3>הרשמה לעדכונים</h3>
       <p className="subscribe-description">
-        הירשמו לקבלת עדכונים על אירועי זיכרון
-        חדשים
+        הירשמו לקבלת עדכונים על אירועי הנצחה חדשים
       </p>
 
       <form

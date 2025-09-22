@@ -261,7 +261,7 @@ export function AddEvent({
         </div>
       )}
 
-      {!isModal && <h1>הוספת אירוע זיכרון</h1>}
+      {!isModal && <h1>הוספת אירוע הנצחה</h1>}
       <form onSubmit={handleSubmit(send)}>
         <div className="form-group">
           <label className="form-label required">

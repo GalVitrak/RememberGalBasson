@@ -1,7 +1,7 @@
 import SEO from "../../SEO/SEO";
 import "./Home.css";
 
-function Home(): JSX.Element {
+function Home(): React.ReactElement {
   // SEO keywords for homepage
   const keywords = [
     // Primary Hebrew Keywords
