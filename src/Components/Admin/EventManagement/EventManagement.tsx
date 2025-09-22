@@ -283,10 +283,18 @@ export function EventManagement(): React.ReactElement {
 
   // Edit event handlers
   const openEditModal = (event: any) => {
+    // Convert DD/MM/YYYY to YYYY-MM-DD for date input
+    const [day, month, year] =
+      event.date.split("/");
+    const formattedDate = `${year}-${month.padStart(
+      2,
+      "0"
+    )}-${day.padStart(2, "0")}`;
+
     setEditingEvent(event);
     setEditName(event.title);
     setEditType(event.type || "");
-    setEditDate(event.date);
+    setEditDate(formattedDate);
     setEditTime(event.time || ""); // Set time
     setEditDescription(event.description || "");
     setEditLocation(event.location || "");
@@ -582,20 +590,10 @@ export function EventManagement(): React.ReactElement {
             {events.map((event) => (
               <div
                 key={event.id}
-                className={`admin-event-wrapper ${
-                  isMobile ? "mobile-view" : ""
-                }`}
-                data-mobile={isMobile}
-                data-width={window.innerWidth}
+                className="admin-event-wrapper"
               >
                 <EventCard event={event} />
-                <div
-                  className={`admin-actions ${
-                    isMobile
-                      ? "mobile-view"
-                      : "desktop-actions"
-                  }`}
-                >
+                <div className="admin-actions">
                   <button
                     className="admin-upload-btn"
                     onClick={() =>
@@ -607,11 +605,6 @@ export function EventManagement(): React.ReactElement {
                     title="העלה תמונות לזיכרון"
                   >
                     📷
-                    {isMobile && (
-                      <span className="mobile-label">
-                        תמונות
-                      </span>
-                    )}
                   </button>
 
                   <button
@@ -622,11 +615,6 @@ export function EventManagement(): React.ReactElement {
                     title="ערוך אירוע"
                   >
                     ✏️
-                    {isMobile && (
-                      <span className="mobile-label">
-                        ערוך
-                      </span>
-                    )}
                   </button>
 
                   <button
@@ -637,11 +625,6 @@ export function EventManagement(): React.ReactElement {
                     title="מחק אירוע"
                   >
                     ✕
-                    {isMobile && (
-                      <span className="mobile-label">
-                        מחק
-                      </span>
-                    )}
                   </button>
                 </div>
               </div>
