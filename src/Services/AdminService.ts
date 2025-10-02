@@ -40,7 +40,7 @@ class AdminService {
       }
 
       // Extract the token
-      const token = response.data.token;
+      const token = response.data;
 
       if (!token) {
         throw new Error(
@@ -88,10 +88,6 @@ class AdminService {
 
       return result.data;
     } catch (error) {
-      console.error(
-        "Error approving candle:",
-        error
-      );
       throw error;
     }
   }
@@ -111,10 +107,6 @@ class AdminService {
 
       return result.data;
     } catch (error) {
-      console.error(
-        "Error deleting forbidden word:",
-        error
-      );
       throw error;
     }
   }

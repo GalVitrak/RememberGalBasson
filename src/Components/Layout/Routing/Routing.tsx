@@ -11,6 +11,8 @@ import { ApproveCandles } from "../../Admin/ApproveCandles/ApproveCandles";
 import { ForbiddenWords } from "../../Admin/ForbiddenWords/ForbiddenWords";
 import { EventManagement } from "../../Admin/EventManagement/EventManagement";
 import { ManageEventTypes } from "../../Admin/ManageEventTypes/ManageEventTypes";
+import { SubscriberManagement } from "../../Admin/SubscriberManagement/SubscriberManagement";
+import { ActivityLogs } from "../../Admin/ActivityLogs/ActivityLogs";
 import { Events } from "../../Events/Events/Events";
 import { Gallery } from "../../Events/Gallery/Gallery";
 import { Unsubscribe } from "../../Events/Unsubscribe/Unsubscribe";
@@ -67,7 +69,7 @@ function Routing(): React.ReactElement {
           element={<ApproveCandles />}
         />
         <Route
-          path="/admin/event-managment"
+          path="/admin/event-management"
           element={<EventManagement />}
         />
         <Route
@@ -77,6 +79,14 @@ function Routing(): React.ReactElement {
         <Route
           path="/admin/forbidden-words"
           element={<ForbiddenWords />}
+        />
+        <Route
+          path="/admin/subscriber-management"
+          element={<SubscriberManagement />}
+        />
+        <Route
+          path="/admin/activity-logs"
+          element={<ActivityLogs />}
         />
         <Route
           path="/unsubscribe"

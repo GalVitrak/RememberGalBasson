@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions/v1";
 import { db } from "./index";
+import { logForbiddenWordsActivity } from "./logger";
 
 const addForbiddenWords = functions.https.onCall(
   async (data, context) => {
@@ -60,16 +61,19 @@ const addForbiddenWords = functions.https.onCall(
 
       await batch.commit();
 
+      await logForbiddenWordsActivity.added(
+        validWords.join(", "),
+        {
+          addedBy: context.auth?.uid || "admin",
+        }
+      );
+
       return {
         message: `${validWords.length} forbidden word(s) added successfully`,
         addedWords: validWords.length,
         words: validWords,
       };
     } catch (error) {
-      console.error(
-        "Error adding forbidden words:",
-        error
-      );
       throw new functions.https.HttpsError(
         "internal",
         "Failed to add forbidden words"

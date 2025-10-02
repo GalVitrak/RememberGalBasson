@@ -16,11 +16,6 @@ class SubscriberService {
       );
       await addSubscriber({ subscriber });
     } catch (error: any) {
-      console.log(
-        "Subscription Response:",
-        error?.data
-      );
-
       // If it's a success response (like 304), don't throw
       if (error?.data?.success) {
         return;
@@ -44,21 +39,17 @@ class SubscriberService {
         functions,
         "unsubscribeSubscriber"
       );
-      console.log(
-        "🔑 Subscriber ID:",
-        subscriberId
-      );
-      const result = await unsubscribeSubscriber({
+      await unsubscribeSubscriber({
         subscriberId,
       });
-      console.log("Function Response:", result);
     } catch (error: any) {
-      console.error("Service Error:", {
-        error,
-        data: error?.data,
-        message: error?.message,
-        details: error?.details,
-      });
+      // Handle 304 status (already unsubscribed) as success
+      if (
+        error?.message?.includes("304") ||
+        error?.code === "304"
+      ) {
+        return; // Treat as success
+      }
 
       // Extract error message from Firebase Functions response
       const errorMessage =

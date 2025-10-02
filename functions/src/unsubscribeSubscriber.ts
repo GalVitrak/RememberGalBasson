@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions/v1";
 import { db } from "./index";
 import { mailjet } from "./sendEventEmail";
+import { logSubscriberActivity } from "./logger";
 
 function formatDate(date: Date): string {
   return date.toLocaleString("he-IL", {
@@ -75,6 +76,15 @@ const unsubscribeSubscriber =
               IsExcludedFromCampaigns: true,
             });
         }
+
+        // Log the unsubscription
+        await logSubscriberActivity.unsubscribed(
+          subscriberId,
+          email,
+          subscriberData?.name,
+          { unsubscribed: true }
+        );
+
         return {
           success: true,
           message:

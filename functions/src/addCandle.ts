@@ -2,15 +2,11 @@ import * as functions from "firebase-functions/v1";
 import { db } from "./index";
 import sendMessage from "./telegramBot";
 import { HttpsError } from "firebase-functions/v1/https";
+import { logCandleActivity } from "./logger";
 
 const addCandle = functions.https.onCall(
   async (data, context) => {
     const { candle } = data;
-    console.log(
-      "addCandle called with data:",
-      data
-    );
-    console.log("candle object:", candle);
 
     try {
       // Get forbidden words
@@ -34,18 +30,12 @@ const addCandle = functions.https.onCall(
           "i"
         );
         if (pattern.test(lowerName)) {
-          console.error(
-            `Forbidden word "${word}" found in writer name`
-          );
           throw new HttpsError(
             "failed-precondition",
             `המילה "${word}" בשם הכותב אסורה לשימוש`
           );
         }
         if (pattern.test(lowerText)) {
-          console.error(
-            `Forbidden word "${word}" found in message text`
-          );
           throw new HttpsError(
             "failed-precondition",
             `המילה "${word}" אסורה לשימוש בהקדשה`
@@ -58,8 +48,19 @@ const addCandle = functions.https.onCall(
         .add({
           ...candle,
           status: "Pending",
-          createdAt: new Date().toISOString(),
+          createdAt: candle.createdAt,
         });
+
+      // Log the candle being lit
+      try {
+        await logCandleActivity.lit(docRef.id, {
+          writerName: candle.writerName,
+          text: candle.text,
+          status: "Pending",
+        });
+      } catch (logError) {
+        // Don't throw the error - we still want to continue even if logging fails
+      }
 
       await sendMessage(
         "נר חדש ממתין לאישור🕯️" +
@@ -81,7 +82,6 @@ const addCandle = functions.https.onCall(
         candleId: docRef.id,
       };
     } catch (error) {
-      console.error(error);
       throw new functions.https.HttpsError(
         "internal",
         "Failed to add candle"

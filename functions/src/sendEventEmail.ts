@@ -18,7 +18,7 @@ const IS_DEV =
 // Base URL for the application
 const BASE_URL = IS_DEV
   ? "http://localhost:5173"
-  : "https://remembergalbasson.web.app";
+  : "https://remembergalbason.com";
 
 if (!MAILJET_API_KEY || !MAILJET_API_SECRET) {
   throw new Error(
@@ -146,7 +146,8 @@ export const onEventPublished =
           Messages: [
             {
               From: {
-                Email: "galvit25@gmail.com",
+                Email:
+                  "noreply@remembergalbason.com",
                 Name: "אתר הנצחה סמ״ר גל בסון ז״ל",
               },
               To: recipients,
@@ -386,7 +387,7 @@ export const testMailjet = functions.https.onCall(
                 Email:
                   process.env
                     .MAILJET_SENDER_EMAIL ||
-                  "galvit25@gmail.com", // Use your validated email
+                  "noreply@remembergalbason.com", // Use your validated email
                 Name: "זכרון גל בסון",
               },
               To: [
@@ -408,7 +409,7 @@ export const testMailjet = functions.https.onCall(
                 event_image:
                   "https://picsum.photos/200/300",
                 event_link:
-                  "https://remembergalbasson.web.app/events/test",
+                  "https://remembergalbason.com/events/test",
                 unsubscribe_url: `${BASE_URL}/unsubscribe?id=test`,
               },
             },

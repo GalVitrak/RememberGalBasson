@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import {
   collection,
   query,
-  doc,
-  deleteDoc,
 } from "firebase/firestore";
 import eventService from "../../../Services/EventService";
 import "./ManageEventTypes.css";
@@ -127,15 +125,7 @@ export function ManageEventTypes(): React.ReactElement {
         [id]: true,
       }));
 
-      // Get the document reference
-      const eventTypeRef = doc(
-        db,
-        "eventTypes",
-        id
-      );
-
-      // Delete the document
-      await deleteDoc(eventTypeRef);
+      await eventService.deleteEventType(id);
 
       // Update local state
       setEventTypes((prev) =>
@@ -144,10 +134,7 @@ export function ManageEventTypes(): React.ReactElement {
         )
       );
     } catch (error) {
-      console.error(
-        "Error deleting event type:",
-        error
-      );
+      // Error handled by notification system
     } finally {
       setIsProcessing((prev) => ({
         ...prev,
@@ -183,10 +170,10 @@ export function ManageEventTypes(): React.ReactElement {
       };
 
       // Call through EventService
-      const response =
-        await eventService.addEventType(
-          eventTypeData
-        );
+
+      await eventService.addEventType(
+        eventTypeData
+      );
 
       // Clear form
       setNewTypeName("");
@@ -265,10 +252,6 @@ export function ManageEventTypes(): React.ReactElement {
       // Close modal
       closeEditModal();
     } catch (error) {
-      console.error(
-        "Error updating event type:",
-        error
-      );
       alert(
         "שגיאה בעדכון סוג האירוע. אנא נסה שוב."
       );

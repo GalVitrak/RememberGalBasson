@@ -2,7 +2,6 @@ import CandleModel from "../../../Models/CandleModel";
 import "./CandleCard.css";
 import { CandleImage } from "../CandleImage/CandleImage";
 import candleService from "../../../Services/CandleService";
-import { notification } from "antd";
 
 interface CandleCardProps {
   candle: CandleModel;

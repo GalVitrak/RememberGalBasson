@@ -1,5 +1,4 @@
 import {
-  db,
   functions,
 } from "../../firebase-config";
 import CandleModel from "../Models/CandleModel";
@@ -16,11 +15,12 @@ class CandleService {
       "addCandle"
     );
     try {
-      const result = await addCandle({ candle });
-      return result.data;
+      await addCandle({ candle });
     } catch (error: any) {
       // Throw the error message from the backend
-      throw new Error(error?.message || "Failed to add candle");
+      throw new Error(
+        error?.message || "Failed to add candle"
+      );
     }
   }
 

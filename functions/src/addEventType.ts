@@ -2,18 +2,16 @@ import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "./index";
+import { logEventTypeActivity } from "./logger";
 
 const addEventType = functions.https.onCall(
   async (data, context) => {
-
-
     try {
       let defaultImageId = "";
       let defaultImageUrl = "";
 
       // Handle image upload if image data is provided
       if (data.imageData) {
-  
         const { fileName, mimeType, base64Data } =
           data.imageData;
 
@@ -56,8 +54,6 @@ const addEventType = functions.https.onCall(
         // Get the public URL
         defaultImageUrl = `https://storage.googleapis.com/${bucket.name}/${imageId}`;
         defaultImageId = uniqueId;
-
-    
       }
 
       // Create the event type object
@@ -73,6 +69,14 @@ const addEventType = functions.https.onCall(
         .collection("eventTypes")
         .add(eventTypeToSave);
 
+      await logEventTypeActivity.added(
+        docRef.id,
+        data.name,
+        data.description,
+        {
+          createdBy: context.auth?.uid || "admin",
+        }
+      );
 
       return {
         success: true,

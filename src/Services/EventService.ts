@@ -217,6 +217,31 @@ class EventService {
       throw error;
     }
   }
+
+  public async deleteEventType(
+    eventTypeId: string
+  ): Promise<{
+    success: boolean;
+    message: string;
+  }> {
+    try {
+      const deleteEventType = httpsCallable(
+        functions,
+        "deleteEventType"
+      );
+
+      const response = await deleteEventType({
+        eventTypeId,
+      });
+
+      return response.data as {
+        success: boolean;
+        message: string;
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 const eventService = new EventService();

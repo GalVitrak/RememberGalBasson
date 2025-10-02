@@ -23,7 +23,7 @@ service cloud.firestore {
 
     // Subscribers collection
     match /subscribers/{subscriberId} {
-      allow read: if false; // Only through Cloud Functions
+      allow read: if true; // Authenticated users can read
       allow create: if true; // Anyone can subscribe
       allow update, delete: if false; // Only through Cloud Functions
     }
@@ -38,6 +38,12 @@ service cloud.firestore {
     match /galleries/{galleryId} {
       allow read: if true; // Anyone can view galleries
       allow write: if false; // Only through Cloud Functions
+    }
+
+    // Activity Logs collection - Only Cloud Functions can write
+    match /activityLogs/{logId} {
+      allow read: if true; // Only admins should read logs
+      allow write: if true; // Cloud Functions can write (they run with admin privileges)
     }
   }
 }

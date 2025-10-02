@@ -2,6 +2,7 @@ import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "./index";
+import { logEventTypeActivity } from "./logger";
 
 const updateEventType = functions.https.onCall(
   async (data, context) => {
@@ -131,6 +132,15 @@ const updateEventType = functions.https.onCall(
 
       // Update the event type document
       await eventTypeRef.update(updateData);
+
+      await logEventTypeActivity.updated(
+        id,
+        name,
+        description,
+        {
+          updatedBy: context.auth?.uid || "admin",
+        }
+      );
 
       return {
         success: true,

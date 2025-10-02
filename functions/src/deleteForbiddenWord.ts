@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions/v1";
 import { db } from "./index";
+import { logForbiddenWordsActivity } from "./logger";
 
 const deleteForbiddenWord =
   functions.https.onCall(
@@ -16,10 +17,20 @@ const deleteForbiddenWord =
 
       try {
         // Delete the forbidden word document
-        await db
+        const wordDoc = await db
           .collection("ForbiddenWords")
           .doc(wordId)
-          .delete();
+          .get();
+
+        await wordDoc.ref.delete();
+
+        await logForbiddenWordsActivity.deleted(
+          wordDoc.data()?.word || "Unknown",
+          {
+            deletedBy:
+              context.auth?.uid || "admin",
+          }
+        );
 
         return {
           success: true,
@@ -27,10 +38,6 @@ const deleteForbiddenWord =
             "Forbidden word deleted successfully",
         };
       } catch (error) {
-        console.error(
-          "Error deleting forbidden word:",
-          error
-        );
         throw new functions.https.HttpsError(
           "internal",
           "Failed to delete forbidden word"

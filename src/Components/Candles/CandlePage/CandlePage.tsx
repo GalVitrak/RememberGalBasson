@@ -74,8 +74,8 @@ export function CandlePage(): React.ReactElement {
           "Yahalom unit memorial candle",
           "Virtual memorial candle",
         ]}
-        url="https://remembergalbasson.com/candles"
-        canonicalUrl="https://remembergalbasson.com/candles"
+        url="https://remembergalbason.com/candles"
+        canonicalUrl="https://remembergalbason.com/candles"
       />
 
       <div className="CandlePage__header">

@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions/v1";
 import { db } from "./index";
 import { mailjet } from "./sendEventEmail";
+import { logSubscriberActivity } from "./logger";
 
 function formatDate(date: Date): string {
   return date.toLocaleString("he-IL", {
@@ -30,9 +31,61 @@ const addSubscriber = functions.https.onCall(
         .get();
       if (snapshot.empty) {
         // Add to Firestore
-        await db
+        const subscriberRef = await db
           .collection("subscribers")
           .add(subscriber);
+
+        // Send welcome email using Mailjet template
+        try {
+          const BASE_URL =
+            "https://remembergalbason.com";
+          const unsubscribeUrl = `${BASE_URL}/unsubscribe?id=${subscriberRef.id}`;
+
+          await mailjet
+            .post("send", { version: "v3.1" })
+            .request({
+              Messages: [
+                {
+                  From: {
+                    Email:
+                      "noreply@remembergalbason.com",
+                    Name: "אתר הנצחה לזכר גל בסון ז״ל",
+                  },
+                  To: [
+                    {
+                      Email: subscriber.email,
+                      Name: subscriber.name,
+                    },
+                  ],
+                  TemplateID: 7361495,
+                  TemplateLanguage: true,
+                  Variables: {
+                    subscriber_name:
+                      subscriber.name,
+                    unsubscribe_url:
+                      unsubscribeUrl,
+                  },
+                },
+              ],
+            });
+
+          console.log(
+            "Welcome email sent successfully to:",
+            subscriber.email
+          );
+        } catch (emailError: any) {
+          console.error(
+            "Failed to send welcome email:",
+            {
+              error: emailError,
+              message: emailError?.message,
+              status:
+                emailError?.response?.status,
+              data: emailError?.response?.data,
+            }
+          );
+          // Don't throw error here - subscription should still succeed even if email fails
+        }
 
         // Try to add to Mailjet
         try {
@@ -187,6 +240,14 @@ const addSubscriber = functions.https.onCall(
             throw mailjetError;
           }
         }
+        // Log the subscription
+        await logSubscriberActivity.subscribed(
+          subscriberRef.id,
+          subscriber.email,
+          subscriber.name,
+          { subscribed: true }
+        );
+
         return {
           success: true,
           message:
@@ -206,6 +267,58 @@ const addSubscriber = functions.https.onCall(
               lastUpdated: formatDate(new Date()),
               name: subscriber.name, // Update name in case it changed
             });
+
+          // Send welcome email for reactivated subscriber
+          try {
+            const BASE_URL =
+              "https://remembergalbason.com";
+            const unsubscribeUrl = `${BASE_URL}/unsubscribe?id=${snapshot.docs[0].id}`;
+
+            await mailjet
+              .post("send", { version: "v3.1" })
+              .request({
+                Messages: [
+                  {
+                    From: {
+                      Email:
+                        "noreply@remembergalbason.com",
+                      Name: "אתר הנצחה לזכר גל בסון ז״ל",
+                    },
+                    To: [
+                      {
+                        Email: subscriber.email,
+                        Name: subscriber.name,
+                      },
+                    ],
+                    TemplateID: 7361495,
+                    TemplateLanguage: true,
+                    Variables: {
+                      subscriber_name:
+                        subscriber.name,
+                      unsubscribe_url:
+                        unsubscribeUrl,
+                    },
+                  },
+                ],
+              });
+
+            console.log(
+              "Welcome email sent successfully to reactivated subscriber:",
+              subscriber.email
+            );
+          } catch (emailError: any) {
+            console.error(
+              "Failed to send welcome email to reactivated subscriber:",
+              {
+                error: emailError,
+                message: emailError?.message,
+                status:
+                  emailError?.response?.status,
+                data: emailError?.response?.data,
+              }
+            );
+            // Don't throw error here - subscription should still succeed even if email fails
+          }
 
           // Reactivate in Mailjet
           await mailjet
@@ -266,6 +379,16 @@ const addSubscriber = functions.https.onCall(
                 });
             }
           }
+          // Log the reactivation
+          await logSubscriberActivity.subscribed(
+            snapshot.docs[0].id,
+            subscriber.email,
+            subscriber.name,
+            {
+              reactivated: true,
+            }
+          );
+
           return {
             success: true,
             message:

@@ -1,6 +1,9 @@
 import * as functions from "firebase-functions/v1";
 import { db } from "./index";
 import sendMessage from "./telegramBot";
+import {
+  logCandleActivity,
+} from "./logger";
 
 const reportCandle = functions.https.onCall(
   async (data, context) => {
@@ -36,6 +39,26 @@ const reportCandle = functions.https.onCall(
           status: "Reported",
           reported: true,
         });
+
+      // Log candle report - direct approach
+      try {
+        await logCandleActivity.reported(
+          candleId,
+          {
+            reason: "user_report",
+            text: candleData?.text,
+            writerName: candleData?.writerName,
+          }
+        );
+        console.log(
+          "Candle report logged successfully!"
+        );
+      } catch (logError) {
+        console.error(
+          "Failed to log candle report:",
+          logError
+        );
+      }
 
       // Send Telegram notification for reported candle
       await sendMessage(

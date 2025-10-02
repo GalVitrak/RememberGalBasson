@@ -238,10 +238,6 @@ export function Gallery(): React.ReactElement {
   }
 
   if (eventError || galleryError) {
-    console.error("Gallery Error:", {
-      eventError,
-      galleryError,
-    });
     return (
       <div className="Gallery">
         <div className="error">
@@ -291,8 +287,8 @@ export function Gallery(): React.ReactElement {
           "Yahalom unit gallery",
           "Memorial image gallery",
         ]}
-        url={`https://remembergalbasson.com/gallery?event=${finalEventId}`}
-        canonicalUrl={`https://remembergalbasson.com/gallery?event=${finalEventId}`}
+        url={`https://remembergalbason.com/gallery?event=${finalEventId}`}
+        canonicalUrl={`https://remembergalbason.com/gallery?event=${finalEventId}`}
       />
 
       {/* Event Info at the top */}

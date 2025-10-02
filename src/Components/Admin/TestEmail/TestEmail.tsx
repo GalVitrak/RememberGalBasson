@@ -29,10 +29,6 @@ export function TestEmail(): React.ReactElement {
       });
       setEmail("");
     } catch (error) {
-      console.error(
-        "Failed to send test email:",
-        error
-      );
       setStatus({
         type: "error",
         message:

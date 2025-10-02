@@ -38,7 +38,6 @@ export function AddSubscriber(): React.ReactElement {
         3000
       );
     } catch (err: any) {
-      console.error(err);
       // The error message from the backend is already in Hebrew
       // Extract the error message from the service error
       const errorMessage =

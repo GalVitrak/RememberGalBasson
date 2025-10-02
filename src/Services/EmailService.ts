@@ -12,12 +12,6 @@ class EmailService {
       );
       await testMailjet({ testEmail });
     } catch (error: any) {
-      console.error("Test email failed:", {
-        error,
-        message: error.message,
-        details: error.details,
-        code: error.code,
-      });
       throw error;
     }
   }

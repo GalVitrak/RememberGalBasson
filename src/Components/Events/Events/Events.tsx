@@ -125,8 +125,8 @@ export function Events(): React.ReactElement {
           "Memorial Events",
           "Gal Bason events",
         ]}
-        url="https://remembergalbasson.com/events"
-        canonicalUrl="https://remembergalbasson.com/events"
+        url="https://remembergalbason.com/events"
+        canonicalUrl="https://remembergalbason.com/events"
       />
 
       <div className="Event_Header">

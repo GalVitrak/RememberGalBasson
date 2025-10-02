@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import { db } from "./index";
+import { logEventActivity } from "./logger";
 
 const deleteEvent = functions.https.onCall(
   async (data, context) => {
@@ -85,6 +86,20 @@ const deleteEvent = functions.https.onCall(
 
       // Delete the event document
       await eventRef.delete();
+
+      // Log event deletion
+      await logEventActivity.deleted(
+        eventId,
+        eventData?.title || "Unknown",
+        {
+          type: eventData?.type,
+          date: eventData?.date,
+          location: eventData?.location,
+          deletedBy: context.auth?.uid || "admin",
+          hadGallery:
+            eventData?.hasGallery || false,
+        }
+      );
 
       return {
         success: true,

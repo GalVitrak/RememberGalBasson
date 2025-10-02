@@ -326,38 +326,47 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 10px;
 }
 
 .report-button button {
-  background-color: rgba(139, 69, 19, 0.1);
-  border: 1px solid rgba(139, 69, 19, 0.3);
+  background-color: #f5f5dc;
+  border: 1px solid #d2b48c;
   color: #8b4513;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 6px;
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  text-align: center;
 }
 
 .report-button button:hover {
-  background-color: rgba(139, 69, 19, 0.2);
-  border-color: rgba(139, 69, 19, 0.5);
+  background-color: #f0e68c;
+  border-color: #b8860b;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 .report-button button:active {
   transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .report-button button:disabled {
-  opacity: 0.5;
+  background-color: #f5f5f5;
+  border-color: #d3d3d3;
+  color: #808080;
   cursor: not-allowed;
-  background-color: #ccc;
-  color: #666;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .report-button button:disabled:hover {
-  background-color: #ccc;
+  background-color: #f5f5f5;
+  border-color: #d3d3d3;
   transform: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }

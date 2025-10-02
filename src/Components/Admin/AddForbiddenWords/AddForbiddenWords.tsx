@@ -104,14 +104,9 @@ export function AddForbiddenWords({
         (word) => word.word
       );
 
-      const result = await addForbiddenWords({
+      await addForbiddenWords({
         words: wordsToAdd,
       });
-
-      console.log(
-        "Words added successfully:",
-        result.data
-      );
 
       setSuccessMessage(
         `${validWords.length} מילים נוספו בהצלחה!`
@@ -133,10 +128,6 @@ export function AddForbiddenWords({
         3000
       );
     } catch (error) {
-      console.error(
-        "Error adding forbidden words:",
-        error
-      );
       alert("שגיאה בשמירת המילים");
     } finally {
       setIsSubmitting(false);

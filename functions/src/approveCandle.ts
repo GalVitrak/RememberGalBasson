@@ -1,6 +1,9 @@
 import * as functions from "firebase-functions/v1";
 import { db } from "./index";
 import cyber from "./cyber";
+import {
+  logCandleActivity,
+} from "./logger";
 
 const approveCandle = functions.https.onCall(
   async (data, context) => {
@@ -58,6 +61,18 @@ const approveCandle = functions.https.onCall(
             approvedAt: new Date(),
           });
 
+        // Log candle approval
+        try {
+          await logCandleActivity.approved(
+            candleId,
+            {
+              approved: true,
+            }
+          );
+        } catch (logError) {
+          // Logging failed, continue
+        }
+
         return {
           success: true,
           message: "Candle approved successfully",
@@ -65,10 +80,29 @@ const approveCandle = functions.https.onCall(
         };
       } else {
         // Delete the candle completely
+        const candleDoc = await db
+          .collection("candles")
+          .doc(candleId)
+          .get();
+        const candle = candleDoc.data();
         await db
           .collection("candles")
           .doc(candleId)
           .delete();
+
+        // Log candle deletion
+        try {
+          await logCandleActivity.deleted(
+            candleId,
+            {
+              reason: "rejected by admin",
+              text: candle?.text,
+              writerName: candle?.writerName,
+            }
+          );
+        } catch (logError) {
+          // Logging failed, continue
+        }
 
         return {
           success: true,
@@ -78,10 +112,6 @@ const approveCandle = functions.https.onCall(
         };
       }
     } catch (error) {
-      console.error(
-        "Error updating candle:",
-        error
-      );
       throw new functions.https.HttpsError(
         "internal",
         "Failed to update candle status"

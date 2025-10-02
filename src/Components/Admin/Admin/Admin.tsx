@@ -1,13 +1,9 @@
 import {
   useNavigate,
-  Routes,
-  Route,
   Link,
-  Outlet,
 } from "react-router-dom";
 import adminService from "../../../Services/AdminService";
 import "./Admin.css";
-import { ApproveCandles } from "../ApproveCandles/ApproveCandles";
 import { useEffect } from "react";
 import { refreshAuthState } from "../../../Context/AuthState";
 import { TestEmail } from "../TestEmail/TestEmail";
@@ -53,7 +49,7 @@ function Admin(): React.ReactElement {
           <h3>ניהול אירועים</h3>
           <p>הוספת אירועים חדשים ללוח השנה</p>
           <Link
-            to="/admin/event-managment"
+            to="/admin/event-management"
             className="admin-button"
           >
             נהל אירועים
@@ -78,6 +74,31 @@ function Admin(): React.ReactElement {
             className="admin-button"
           >
             נהל מילים אסורות
+          </Link>
+        </div>
+
+        <div className="admin-section">
+          <h3>ניהול מנויים</h3>
+          <p>
+            צפייה ברשימת המנויים וביטול מנויים
+            ידני
+          </p>
+          <Link
+            to="/admin/subscriber-management"
+            className="admin-button"
+          >
+            נהל מנויים
+          </Link>
+        </div>
+
+        <div className="admin-section">
+          <h3>לוגי פעילות</h3>
+          <p>צפייה בלוגי הפעילות של המערכת</p>
+          <Link
+            to="/admin/activity-logs"
+            className="admin-button"
+          >
+            צפה בלוגים
           </Link>
         </div>
 

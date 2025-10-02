@@ -46,10 +46,6 @@ export function ApproveCandles(): React.ReactElement {
         prev.filter((candle) => candle.id !== id)
       );
     } catch (error) {
-      console.error(
-        "Error approving candle:",
-        error
-      );
       alert("שגיאה באישור הנר");
     } finally {
       setIsProcessing((prev) => ({
@@ -76,10 +72,6 @@ export function ApproveCandles(): React.ReactElement {
         prev.filter((candle) => candle.id !== id)
       );
     } catch (error) {
-      console.error(
-        "Error rejecting candle:",
-        error
-      );
       alert("שגיאה בדחיית הנר");
     } finally {
       setIsProcessing((prev) => ({

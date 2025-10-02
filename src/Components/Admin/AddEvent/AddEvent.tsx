@@ -123,21 +123,6 @@ export function AddEvent({
         };
       }
 
-      // Create a Date object with the combined date and time
-      const [year, month, day] = formData.date
-        .split("-")
-        .map(Number);
-      const [hours, minutes] = formData.time
-        .split(":")
-        .map(Number);
-      const eventDateTime = new Date(
-        year,
-        month - 1,
-        day,
-        hours,
-        minutes
-      );
-
       // Create the event object with all the data
       const eventData = {
         title: formData.title,

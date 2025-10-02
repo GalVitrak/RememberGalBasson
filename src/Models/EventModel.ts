@@ -1,4 +1,3 @@
-import EventTypeModel from "./EventTypeModel";
 
 class EventModel {
   id: string;

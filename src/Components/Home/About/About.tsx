@@ -155,11 +155,11 @@ function About(): React.ReactElement {
       "@type": "Occupation",
       name: "לוחם הנדסה קרבית",
     },
-    url: "https://remembergalbasson.com",
+    url: "https://remembergalbason.com",
     image:
-      "https://remembergalbasson.com/src/assets/gal.jpg",
+      "https://remembergalbason.com/src/assets/gal.jpg",
     sameAs: [
-      "https://remembergalbasson.com/about",
+      "https://remembergalbason.com/about",
     ],
   };
 
@@ -171,8 +171,8 @@ function About(): React.ReactElement {
         keywords={keywords}
         structuredData={structuredData}
         image="/src/assets/gal.jpg"
-        url="https://remembergalbasson.com/about"
-        canonicalUrl="https://remembergalbasson.com/about"
+        url="https://remembergalbason.com/about"
+        canonicalUrl="https://remembergalbason.com/about"
       />
 
       <section className="hero-section">

@@ -55,11 +55,11 @@ function Home(): React.ReactElement {
     name: "Remember Gal Bason - אתר הנצחה לזכר גל בסון",
     description:
       "אתר הנצחה לזכרו של סמ״ר גל בסון ז״ל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית",
-    url: "https://remembergalbasson.com",
+    url: "https://remembergalbason.com",
     potentialAction: {
       "@type": "SearchAction",
       target:
-        "https://remembergalbasson.com/search?q={search_term_string}",
+        "https://remembergalbason.com/search?q={search_term_string}",
       "query-input":
         "required name=search_term_string",
     },
@@ -73,8 +73,8 @@ function Home(): React.ReactElement {
         keywords={keywords}
         structuredData={structuredData}
         image="/src/assets/gal.jpg"
-        url="https://remembergalbasson.com"
-        canonicalUrl="https://remembergalbasson.com"
+        url="https://remembergalbason.com"
+        canonicalUrl="https://remembergalbason.com"
       />
 
       {/* Homepage content will go here */}

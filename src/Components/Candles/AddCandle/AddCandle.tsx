@@ -49,10 +49,7 @@ export function AddCandle({
         );
         setForbiddenWords(words);
       } catch (error) {
-        console.error(
-          "Error loading forbidden words:",
-          error
-        );
+        // Continue without forbidden words check
       }
     };
     loadForbiddenWords();
@@ -180,8 +177,8 @@ export function AddCandle({
           "Virtual candle memorial",
           "Add memorial candle",
         ]}
-        url="https://remembergalbasson.com/add-candle"
-        canonicalUrl="https://remembergalbasson.com/add-candle"
+        url="https://remembergalbason.com/add-candle"
+        canonicalUrl="https://remembergalbason.com/add-candle"
       />
 
       <div className="addCandle-form">

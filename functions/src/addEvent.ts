@@ -2,12 +2,12 @@ import * as functions from "firebase-functions/v1";
 import { getStorage } from "firebase-admin/storage";
 import { Timestamp } from "firebase-admin/firestore";
 import { v4 as uuidv4 } from "uuid";
+import { logEventActivity } from "./logger";
 import { db } from "./index";
 
 const addEvent = functions.https.onCall(
   async (data, context) => {
     const { event } = data;
-    console.log("Received event data:", event);
 
     // Validate required fields
     if (!event) {
@@ -209,9 +209,21 @@ const addEvent = functions.https.onCall(
         createdAt: Timestamp.fromDate(new Date()),
       };
 
-      await db
+      const eventRef = await db
         .collection("events")
         .add(eventToSave);
+
+      // Log event creation
+      await logEventActivity.added(
+        eventRef.id,
+        event.title,
+        {
+          type: event.type,
+          date: formattedDate,
+          location: event.location,
+          createdBy: context.auth?.uid || "admin",
+        }
+      );
 
       return {
         success: true,

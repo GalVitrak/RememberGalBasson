@@ -2,6 +2,7 @@ import * as functions from "firebase-functions/v1";
 import * as admin from "firebase-admin";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "./index";
+import { logEventActivity } from "./logger";
 
 const updateEvent = functions.https.onCall(
   async (data, context) => {
@@ -69,6 +70,8 @@ const updateEvent = functions.https.onCall(
           "Event not found"
         );
       }
+
+      const oldEventData = eventDoc.data();
 
       // Update the event
       const updateData: any = {
@@ -233,6 +236,20 @@ const updateEvent = functions.https.onCall(
       }
 
       await eventRef.update(updateData);
+
+      // Log event update
+      await logEventActivity.updated(id, title, {
+        type: type,
+        date: date,
+        location: location,
+        updatedBy: context.auth?.uid || "admin",
+        updatedAt: new Date().toISOString(),
+        changes: {
+          oldTitle: oldEventData?.title,
+          oldType: oldEventData?.type,
+          oldDate: oldEventData?.date,
+        },
+      });
 
       return {
         success: true,

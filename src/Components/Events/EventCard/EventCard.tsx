@@ -33,6 +33,22 @@ export function EventCard({
 
     // Handle string date (for event.date)
     if (typeof dateInput === "string") {
+      // Check if it's an ISO string timestamp
+      if (
+        dateInput.includes("T") &&
+        dateInput.includes("Z")
+      ) {
+        const date = new Date(dateInput);
+        const day = date
+          .getDate()
+          .toString()
+          .padStart(2, "0");
+        const month = (date.getMonth() + 1)
+          .toString()
+          .padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
       return dateInput;
     }
 
@@ -101,10 +117,6 @@ export function EventCard({
 
         window.open(wazeUrl, "_blank");
       } catch (error) {
-        console.error(
-          "Error creating Waze URL:",
-          error
-        );
         // Fallback to location name
         const fallbackUrl = `https://waze.com/ul?q=${encodeURIComponent(
           event.location
@@ -170,8 +182,6 @@ END:VCALENDAR`;
 
   const handleGalleryClick = () => {
     // Navigate to gallery for this specific event
-    // For now, we'll navigate to a general gallery page
-    // TODO: Implement event-specific gallery routing
     window.location.href = `/gallery?event=${event.id}`;
   };
 
@@ -183,7 +193,7 @@ END:VCALENDAR`;
             src={event.coverImageUrl}
             alt={event.title}
             loading="lazy"
-            onError={(e) => {
+            onError={() => {
               // Image failed to load
             }}
             onLoad={() => {

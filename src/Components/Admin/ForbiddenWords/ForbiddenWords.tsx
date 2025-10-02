@@ -28,8 +28,6 @@ export function ForbiddenWords(): React.ReactElement {
 
   const [addWordModalOpen, setAddWordModalOpen] =
     useState(false);
-  const [refreshTrigger, setRefreshTrigger] =
-    useState(0);
 
   // Create reference to the ForbiddenWords collection
   const forbiddenWordsRef = collection(
@@ -39,11 +37,8 @@ export function ForbiddenWords(): React.ReactElement {
 
   const wordsQuery = query(forbiddenWordsRef);
 
-  const [
-    wordsSnapshot,
-    wordsLoading,
-    wordsError,
-  ] = useCollection(wordsQuery);
+  const [wordsSnapshot, wordsLoading] =
+    useCollection(wordsQuery);
 
   useEffect(() => {
     if (wordsSnapshot) {
@@ -57,8 +52,7 @@ export function ForbiddenWords(): React.ReactElement {
   }, [wordsSnapshot]);
 
   const handleDeleteWord = async (
-    wordId: string,
-    word: string
+    wordId: string
   ) => {
     const wordToRemove = ForbiddenWords.find(
       (item) => item.id === wordId
@@ -89,10 +83,6 @@ export function ForbiddenWords(): React.ReactElement {
         )
       );
     } catch (error) {
-      console.error(
-        "Error deleting forbidden word:",
-        error
-      );
       alert("שגיאה במחיקת המילה");
     } finally {
       setDeletingWords((prev) => ({
@@ -172,8 +162,7 @@ export function ForbiddenWords(): React.ReactElement {
                     className="delete-word-btn"
                     onClick={() =>
                       handleDeleteWord(
-                        wordItem.id,
-                        wordItem.word
+                        wordItem.id
                       )
                     }
                     disabled={
@@ -215,7 +204,6 @@ export function ForbiddenWords(): React.ReactElement {
       >
         <AddForbiddenWords
           onWordsAdded={() => {
-            setRefreshTrigger((prev) => prev + 1);
             setAddWordModalOpen(false);
           }}
         />
