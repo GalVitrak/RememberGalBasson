@@ -6,7 +6,7 @@ function Footer(): React.ReactElement {
       <div className="footer-content">
         <p>יהי זכרו ברוך</p>
         <p className="credit-text">
-          נבנה בהתנדבות ע"י גל ויטרק
+          האתר נבנה בהתנדבות ע"י גל ויטרק
         </p>
       </div>
     </footer>

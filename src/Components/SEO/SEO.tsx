@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
 
+// Google Analytics 4 configuration
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void;
+    dataLayer: any[];
+  }
+}
+
 interface SEOProps {
   title: string;
   description: string;
@@ -8,6 +16,8 @@ interface SEOProps {
   url?: string;
   structuredData?: any;
   canonicalUrl?: string;
+  googleAnalyticsId?: string;
+  googleSearchConsoleId?: string;
 }
 
 export default function SEO({
@@ -18,6 +28,8 @@ export default function SEO({
   url,
   structuredData,
   canonicalUrl,
+  googleAnalyticsId,
+  googleSearchConsoleId,
 }: SEOProps): React.ReactElement | null {
   useEffect(() => {
     // Update document title
@@ -117,6 +129,20 @@ export default function SEO({
     // Set HTML language and direction
     document.documentElement.lang = "he";
     document.documentElement.dir = "rtl";
+
+    // Initialize Google Analytics 4
+    if (googleAnalyticsId) {
+      initializeGoogleAnalytics(
+        googleAnalyticsId
+      );
+    }
+
+    // Add Google Search Console verification
+    if (googleSearchConsoleId) {
+      addGoogleSearchConsoleVerification(
+        googleSearchConsoleId
+      );
+    }
   }, [
     title,
     description,
@@ -125,6 +151,8 @@ export default function SEO({
     url,
     structuredData,
     canonicalUrl,
+    googleAnalyticsId,
+    googleSearchConsoleId,
   ]);
 
   // Helper function to update or create meta tags
@@ -174,6 +202,49 @@ export default function SEO({
     script.type = "application/ld+json";
     script.textContent = JSON.stringify(data);
     document.head.appendChild(script);
+  };
+
+  // Initialize Google Analytics 4
+  const initializeGoogleAnalytics = (
+    gaId: string
+  ) => {
+    // Initialize dataLayer if it doesn't exist
+    window.dataLayer = window.dataLayer || [];
+
+    // Define gtag function
+    function gtag(...args: any[]) {
+      window.dataLayer.push(args);
+    }
+
+    window.gtag = gtag;
+
+    // Load Google Analytics script
+    const script =
+      document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+    document.head.appendChild(script);
+
+    // Configure Google Analytics
+    gtag("js", new Date());
+    gtag("config", gaId, {
+      page_title: title,
+      page_location: url || window.location.href,
+      custom_map: {
+        custom_parameter_1: "memorial_site",
+      },
+    });
+  };
+
+  // Add Google Search Console verification
+  const addGoogleSearchConsoleVerification = (
+    verificationId: string
+  ) => {
+    updateMetaTag(
+      "name",
+      "google-site-verification",
+      verificationId
+    );
   };
 
   // This component doesn't render anything visible

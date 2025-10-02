@@ -6,4 +6,20 @@ Allow: /
 Sitemap: https://remembergalbason.com/sitemap.xml
 
 # Allow all search engines to crawl the site
-# This is important for memorial sites to be discoverable 
+# This is important for memorial sites to be discoverable
+
+# Specific instructions for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Allow all major search engines
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block admin areas
+Disallow: /admin/
+Disallow: /admin/* 

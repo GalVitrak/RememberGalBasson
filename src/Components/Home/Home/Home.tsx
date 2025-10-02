@@ -1,4 +1,8 @@
 import SEO from "../../SEO/SEO";
+import {
+  getMemorialSiteStructuredData,
+  getPersonStructuredData,
+} from "../../../Utils/structuredData";
 import "./Home.css";
 
 function Home(): React.ReactElement {
@@ -48,21 +52,14 @@ function Home(): React.ReactElement {
     "Holon fallen soldier",
   ];
 
-  // Structured data for homepage
+  // Enhanced structured data for homepage
+  const memorialSiteData =
+    getMemorialSiteStructuredData();
+  const personData = getPersonStructuredData();
+
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Remember Gal Bason - אתר הנצחה לזכר גל בסון",
-    description:
-      "אתר הנצחה לזכרו של סמ״ר גל בסון ז״ל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית",
-    url: "https://remembergalbason.com",
-    potentialAction: {
-      "@type": "SearchAction",
-      target:
-        "https://remembergalbason.com/search?q={search_term_string}",
-      "query-input":
-        "required name=search_term_string",
-    },
+    "@graph": [memorialSiteData, personData],
   };
 
   return (
@@ -72,9 +69,11 @@ function Home(): React.ReactElement {
         description="אתר הנצחה לזכרו של סמ״ר גל בסון ז״ל, לוחם ביחידת יהל״ם של חיל ההנדסה הקרבית, אשר נפל במהלך מבצע צוק איתן. הדליק נר זיכרון, צפה בגלריה וקריאה על חייו."
         keywords={keywords}
         structuredData={structuredData}
-        image="/src/assets/gal.jpg"
+        image="https://remembergalbason.com/src/assets/gal.jpg"
         url="https://remembergalbason.com"
         canonicalUrl="https://remembergalbason.com"
+        googleAnalyticsId="G-XXXXXXXXXX" // Replace with your GA4 ID
+        googleSearchConsoleId="isvTiXOGp9bA_-_L3R38tq7ITcvCtYOCJwGSYS2MBEg"
       />
 
       {/* Homepage content will go here */}
